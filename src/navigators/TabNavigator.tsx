@@ -1,17 +1,18 @@
 import * as React from 'react';
+import HomeScreen from '../screens/HomeScreen';
 import { Tab } from './MainRouter';
 // import { useStoreState } from '../store/hooks';
 
 const TabNavigator = () => {
     //const { theme } = useStoreState(state => state.themeModel)
-/*
+
     function Home() {
 
         return (
-            <NoteNavigator/>
+            <HomeScreen/>
         )
     }
-
+/*
     function Pass() {
         return (
             <PassNavigator/>
@@ -37,8 +38,8 @@ const TabNavigator = () => {
                 }*/
             }}
         >
-            {/*<Tab.Screen name="Note" component={Home} />
-            <Tab.Screen name="Pass" component={Pass} />
+            <Tab.Screen name="Note" component={Home} />
+            {/*<Tab.Screen name="Pass" component={Pass} />
             <Tab.Screen name="Profil" component={ProfilScreen} />*/}
         </Tab.Navigator>
     );
