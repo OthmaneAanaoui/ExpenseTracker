@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from '../context/AuthContext';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthNavigator from './AuthNavigator';
 import TabNavigator from './TabNavigator';
 
@@ -11,7 +11,7 @@ export type MainStackParamList = {
 }
 
 export const Stack = createStackNavigator<MainStackParamList>();
-export const Tab = createMaterialTopTabNavigator();
+export const Tab = createBottomTabNavigator();
 
 const MainRouter = () => {
     const auth = useAuth()
