@@ -54,7 +54,6 @@ const AuthScreen: React.FC<Props> = () => {
     const onPressLogin = async () => {
         try {
             await auth.signIn(email, password);
-            alert("Welcome " + auth.user?.email);
         } catch (e) {
             codeError(e);
         }
