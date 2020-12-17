@@ -11,6 +11,7 @@ import "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyB4NiyLLhUEqh9LQGcHd2MczOoDWdCeIvw",
   authDomain: "expensetracker-8a40f.firebaseapp.com",
+  databaseURL: 'https://expensetracker-8a40f.firebaseio.com',
   projectId: "expensetracker-8a40f",
   storageBucket: "expensetracker-8a40f.appspot.com",
   messagingSenderId: "1068921369277",
