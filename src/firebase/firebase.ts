@@ -14,7 +14,8 @@ const firebaseConfig = {
   projectId: "expensetracker-8a40f",
   storageBucket: "expensetracker-8a40f.appspot.com",
   messagingSenderId: "1068921369277",
-  appId: "1:1068921369277:web:47f25dfa4bce1a2cfa7dd4"
+  appId: "1:1068921369277:web:47f25dfa4bce1a2cfa7dd4",
+  measurementId: 'G-measurement-id',
 };
 
 firebase.initializeApp(firebaseConfig);
