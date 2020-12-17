@@ -7,7 +7,7 @@ const AuthNavigator = () => {
     //const { theme } = useStoreState(state => state.themeModel)
 
     return (
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Analytics">
             <Stack.Screen name="Auth" component={AuthScreen} /*options={{
 
                 headerStyle: {
