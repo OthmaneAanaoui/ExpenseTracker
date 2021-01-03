@@ -1,8 +1,12 @@
 import './src/firebase/firebase';
 import React from 'react';
-import { StyleSheet } from "react-native";
+import { LogBox, Platform, StyleSheet } from "react-native";
 import MainRouter from "./src/navigators/MainRouter";
 import {AuthContextProvider} from "./src/context/AuthContext";
+
+if(Platform.OS === 'android') {
+  LogBox.ignoreLogs(['Setting a timer']);
+}
 
 export default function App() {
   return (
