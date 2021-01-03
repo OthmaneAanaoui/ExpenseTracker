@@ -24,13 +24,12 @@ const TabNavigator = () => {
             tabBarOptions={{
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
-                showIcon:true,
+                // showIcon:true,
                 /*style: {
                     backgroundColor: theme.appBackgroundColor,
                 },*/
                 labelStyle: {
-                    fontWeight: '500',
-                    upperCaseLabel:true
+                    fontWeight: '500'
                 },
                 /*
                 indicatorStyle: {

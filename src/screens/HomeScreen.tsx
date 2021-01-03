@@ -1,11 +1,114 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Modal, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, TouchableHighlight, Switch } from "react-native";
-
+import Barcharts from "../chart/BarCharts";
+import { Bars } from "../chart/BarType";
 type Props = {};
 
+// Format de données
+const data:Bars = [
+  // bar 1
+  {
+      title: 'Oct',
+      bars: [
+        {
+          data: [1359],
+          barStyle: [
+            {index:0, color:"red", radius:2 },
+
+          ]
+        },
+        {
+          data: [70,320,164],
+          barStyle: [
+            {index:0, color:"blue", radius:2 },
+            {index:1, color:"pink", radius:2 },
+            {index:2, color:"yellow", radius:2 }            
+          ]
+        },
+      ]
+  },
+  // bar 2
+  {
+      title: 'Nov',
+      bars: [
+      {
+        data: [1200,236],
+        barStyle: [
+          {index:0, color:"red", radius:2 },
+
+        ]
+      },
+      {
+        data: [80,254,189,163],
+        barStyle: [
+          {index:0, color:"blue", radius:2 },
+          {index:1, color:"pink", radius:2 },
+          {index:2, color:"yellow", radius:2 },            
+          {index:3, color:"orange", radius:2 }            
+        ]
+      }
+    ]
+  },
+    // bar 3
+    {
+      title: 'Dec',
+      bars: [
+      {
+        data: [1546],
+        barStyle: [
+          {index:0, color:"red", radius:2 },
+
+        ]
+      },
+      {
+        data: [125,478]
+      }
+    ]
+  },
+  // bar 4
+  {
+    title: 'Jan',
+    bars: [
+    {
+      data: [1442],
+      barStyle: [
+        {index:0, color:"red", radius:2 },
+
+      ]
+    },
+    {
+      data: [125,478]
+    }
+  ]
+},
+// bar 5
+{
+  title: 'Fev',
+  bars: [
+  {
+    data: [1326, 129.99],
+    barStyle: [
+      {index:0, color:"red", radius:2 },
+
+    ]
+  },
+  {
+    data: [125,478]
+  }
+]
+}
+]
+
 const HomeScreen: React.FC<Props> = () => {
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  let canvas = {
+    backgroundColor:'#f1f1f1',
+    width:"90%",
+    height:300,
+    marginHorizontal:"auto",
+}
     return (
 <>
         <Text>Home</Text>
@@ -16,6 +119,7 @@ const HomeScreen: React.FC<Props> = () => {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
+      <Barcharts style={canvas} data={data} spacingGroupBar={20}/>
 </>
     );
 };
