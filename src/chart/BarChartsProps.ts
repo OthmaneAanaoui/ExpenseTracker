@@ -3,7 +3,7 @@ import { Bars } from './BarType'
 export interface BarChartsProps {
     data?:Bars;
     style?:any;
-    xButton?: boolean;
+    eventBar?:Function|null;
     defaultBarColor?:string;
     backgroundColor?:string;
     spacingBar?:number;
@@ -27,7 +27,6 @@ export interface BarChartsProps {
   }
 
   export const defaultBarChartsProps:BarChartsProps = {
-    xButton: false,
     defaultBarColor:"purple",
     backgroundColor:"#f1f1f1",
     xAxis: {
