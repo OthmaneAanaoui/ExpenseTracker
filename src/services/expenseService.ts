@@ -1,5 +1,5 @@
 import { queryExpense } from '../types/constants';
-import { Category, Expense, Card } from '../types/types';
+import { Expense, ExpenseType } from '../types/types';
 
 export const getExpenses: () => Promise<Expense[]> = async () => {
   const querySnapshot = await queryExpense.get();
@@ -20,13 +20,13 @@ export const getExpense: (id: string) => Promise<Expense> = async (id) => {
   return newExpense;
 }
 
-export const addExpense: (name: string, category: Category, value: number, card: Card, isIncome: boolean) => Promise<Expense> = async (name, category, value, card, isIncome) => {
-  const expense: Expense = {
+export const addExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
+  const expense: ExpenseType = {
     date: new Date().getTime(),
     name: name,
-    category: category,
+    idCategory: idCategory,
     value: value,
-    card: card,
+    idCard: idCard,
     isIncome: isIncome
   };
   const doc = await queryExpense.add(expense);
@@ -43,3 +43,17 @@ export const updateExpense: (expense:Expense) => Promise<Expense> = async (expen
 export const deleteExpense: (id: string) => Promise<void> = async (id) => {
     await queryExpense.doc(id).delete();
 };
+
+export const getExpenseByCard: (idCard: string) => Promise<Expense[]> = async (idCard) => {
+    let newExpenses = getExpenses().then(expenses => {
+      return expenses.filter(item => {item.idCard === idCard})
+    })
+    return newExpenses
+};
+
+export const getExpenseByCategory: (idCategory: string) => Promise<Expense[]> = async (idCategory) => {
+    let newExpenses = getExpenses().then(expenses => {
+      return expenses.filter(item => {item.idCategory === idCategory})
+    })
+  return newExpenses
+}

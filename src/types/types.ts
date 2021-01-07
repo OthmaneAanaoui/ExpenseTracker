@@ -6,7 +6,7 @@ export type Icon = {
   link: string
 }
 
-export type Card = {
+export type CardType = {
   id?: string,
   cardNumber: string,
   cardValidationCode: string,
@@ -14,18 +14,43 @@ export type Card = {
   name: string
 }
 
+export type Card = {
+  id: string,
+  cardNumber: string,
+  cardValidationCode: string,
+  ExpirationDate: number,
+  name: string
+}
+
 export type Category = {
+  id: string,
+  icon: Icon,
+  name: string
+}
+
+export type CategoryType = {
   id?: string,
   icon: Icon,
   name: string
 }
 
-export type Expense = {
+export type ExpenseType = {
   id?: string,
   name: string,
-  category: Category,
+  idCategory: string,
   date: number,
   value: number,
-  card: Card,
+  idCard: string,
   isIncome: boolean
 }
+
+export type Expense = {
+  id: string,
+  name: string,
+  idCategory: string,
+  date: number,
+  value: number,
+  idCard: string,
+  isIncome: boolean
+}
+

@@ -1,5 +1,5 @@
 import { queryCategory } from "../types/constants";
-import { Category, Icon } from "../types/types";
+import { Category, CategoryType, Icon } from "../types/types";
 
 
 export const getCategories: () => Promise<Category[]> = async () => {
@@ -24,7 +24,7 @@ export const getCategory: (id: string) => Promise<Category> = async (id) => {
 
 
 export const addCategory: (icon: Icon, name: string) => Promise<Category> = async (icon, name) => {
-  const category: Category = {
+  const category: CategoryType = {
     name: name,
     icon: icon
   };
