@@ -1,7 +1,9 @@
+import { useStoreState } from "../store/hooks";
 import React, { useEffect, useState } from "react";
 import { Alert, Modal, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, TouchableHighlight, Switch } from "react-native";
 import Barcharts from "../chart/BarCharts";
 import { Bars } from "../chart/BarType";
+import { SelectionTypeEnum } from "../store/model/CurrentSelection";
 type Props = {};
 
 // Format de données
@@ -9,16 +11,18 @@ const data:Bars = [
   // bar 1
   {
       title: 'Oct',
+      idGroupClick:0,
       bars: [
         {
           data: [1359],
           barStyle: [
             {index:0, color:"red", radius:2 },
-
           ]
         },
         {
           data: [70,320,164],
+          eventBar:[{index:0, idBarClick:22, typeClick:SelectionTypeEnum.category},
+            {index:1, idBarClick:53, typeClick:SelectionTypeEnum.category}],
           barStyle: [
             {index:0, color:"blue", radius:2 },
             {index:1, color:"pink", radius:2 },
@@ -30,6 +34,7 @@ const data:Bars = [
   // bar 2
   {
       title: 'Nov',
+      idGroupClick:1,
       bars: [
       {
         data: [1200,236],
@@ -84,6 +89,7 @@ const data:Bars = [
 // bar 5
 {
   title: 'Fev',
+  idGroupClick:4,
   bars: [
   {
     data: [1326, 129.99],
@@ -101,7 +107,9 @@ const data:Bars = [
 
 const HomeScreen: React.FC<Props> = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const { currentSelection } = useStoreState(state => state.currentSelectionModel)
+
+  // const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   let canvas = {
     backgroundColor:'#f1f1f1',
@@ -109,17 +117,22 @@ const HomeScreen: React.FC<Props> = () => {
     height:300,
     marginHorizontal:"auto",
 }
+
+  const onClickBarGraph = () => {
+    console.log("onClickBarGraph homescreen : ",currentSelection)
+  }
     return (
 <>
         <Text>Home</Text>
-        <Switch
+        <Text>test du mois {currentSelection?.id} - {currentSelection.selectionType}</Text>
+        {/* <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
         thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
         value={isEnabled}
-      />
-      <Barcharts style={canvas} data={data} spacingGroupBar={20}/>
+      /> */}
+      <Barcharts style={canvas} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
 </>
     );
 };
