@@ -5,7 +5,6 @@ export interface BarChartsProps {
     style?:any;
     eventBar?:Function|null;
     defaultBarColor?:string;
-    backgroundColor?:string;
     spacingBar?:number;
     spacingGroupBar?:any;
     xAxis?: {
@@ -27,22 +26,21 @@ export interface BarChartsProps {
   }
 
   export const defaultBarChartsProps:BarChartsProps = {
-    defaultBarColor:"purple",
-    backgroundColor:"#f1f1f1",
+    defaultBarColor:"#14B17E",
     xAxis: {
       fontSize:12,
       fontWeight:300,
       fontStyle:"italic",
-      color:"red",
-      lineColor:"grey"
+      color:"#ADB1BA",
+      lineColor:"#848891"
     },
     yAxis: {
       fontSize:12,
       fontWeight:12,
       fontStyle:"italic",
-      color:"orange",
-      lineColor:"grey",
-      gridLineColor:"blue",
+      color:"#ADB1BA",
+      lineColor:"#44494F",
+      gridLineColor:"#44494F",
       nbGridLine:4,
     }  
   }

@@ -25,11 +25,10 @@ export interface CurrentSelectionModel {
 
 const currentSelectionModel: CurrentSelectionModel = {
     currentSelection: {selectionType:SelectionTypeEnum.none, id:0},
-    setCurrentSelection: action((state, currentSelection) =>{
-        state.currentSelection = currentSelection
-        return ({selectionType:currentSelection.selectionType, id:currentSelection.id})
+    setCurrentSelection: action((state, selection) =>{
+        state.currentSelection = selection
+        return ({selectionType:selection.selectionType, id:selection.id})
     })
 }
-
 
 export default currentSelectionModel;
