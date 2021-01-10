@@ -1,8 +1,14 @@
-import { queryBankCard } from "../types/constants";
+import { useAuth } from "../context/AuthContext";
+import { queryUser } from "../types/constants";
 import { Card, CardType } from "../types/types";
 
+const getQuery = () => {
+  const auth = useAuth()
+  return queryUser.doc(auth.user?.uid).collection('bankCard')
+}
+
 export const getCards: () => Promise<Card[]> = async () => {
-  const querySnapshot = await queryBankCard.get();
+  const querySnapshot = await getQuery().get();
   let cards: Card[] = querySnapshot.docs.map((doc) => {
     const data = doc.data() as Card;
     return { ...data, id: doc.id };
@@ -17,7 +23,7 @@ export const addCard: (cardNumber: string, cardValidationCode: string, Expiratio
     ExpirationDate: ExpirationDate,
     name: name
   };
-  const doc = await queryBankCard.add(card);
+  const doc = await getQuery().add(card);
   const newCard: Card = { ...card, id: doc.id };
   return newCard;
 };
@@ -25,11 +31,11 @@ export const addCard: (cardNumber: string, cardValidationCode: string, Expiratio
 
 export const updateCard: (card:Card) => Promise<Card> = async (card) => {
     const updateCard = {...card}
-    await queryBankCard.doc(card.id).update(updateCard);
+    await getQuery().doc(card.id).update(updateCard);
   return updateCard;
 };
 
 
 export const deleteCard: (id: string) => Promise<void> = async (id) => {
-    await queryBankCard.doc(id).delete();
+    await getQuery().doc(id).delete();
 };

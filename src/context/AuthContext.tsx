@@ -19,7 +19,6 @@ const defaultAuthState = {
 
 const AuthContext = createContext<AuthContextType>(defaultAuthState)
 
-
 export const AuthContextProvider: React.FC = ({ children }) => {
     const [auth, setAuth] = React.useState<{ isSignedIn: boolean; user?: firebase.User }>({
         isSignedIn: false

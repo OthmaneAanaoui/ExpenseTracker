@@ -143,7 +143,7 @@ const BarCharts = (props: BarChartsProps) => {
   const drawBar = (heightBar:number, index:number, key:string, pos_x:number, pos_y:number, barStyle?:BarStyle[], eventBar?:EventBar[], idGroupClick?:number) => {
     let style = barStyle?.filter(element => element.index === index)[0]
     let event = eventBar?.filter(element => element.index === index)[0]
-    let fill:string = style?.color !== undefined ? style.color : "grey"
+    let fill:any = style?.color !== undefined ? style.color : defaultBarChartsProps.defaultBarColor
     let radius:number = style?.radius !== undefined ? style.radius : 2
     let selectionType = SelectionTypeEnum.none
     let idItemClick = -1

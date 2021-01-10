@@ -8,12 +8,14 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
     "easy-peasy": "^4.0.1",
     "expo": "~40.0.0",
+    "expo-linear-gradient": "~8.4.0",
     "expo-status-bar": "~1.0.3",
     "firebase": "^7.9.0",
     "firebase-admin": "^9.4.2",

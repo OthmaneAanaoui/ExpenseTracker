@@ -1,5 +1,5 @@
 import { queryIcon } from '../types/constants';
-import { Icon } from '../types/types';
+import { Icon } from '../types/Category';
 
 export const getIcons: () => Promise<Icon[]> = async () => {
   const querySnapshot = await queryIcon.get();

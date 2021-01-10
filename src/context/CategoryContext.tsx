@@ -1,11 +1,11 @@
 import React from "react"
 import { createContext, useContext } from "react"
 import services from "../services/index"
-import {Category, CategoryType, Icon} from "../types/types";
+import {Category, Icon} from "../types/Category";
 
 type CategoryContextType = {
     categories: Category[];
-    asyncCreateCategory: (icon: Icon, name: string) => Promise<Category>;
+    asyncCreateCategory: (icon: Icon, name: string, color:string) => Promise<Category>;
     asyncGetAll: () => Promise<Category[]>;
     asyncUpdateCategory: (category:Category) => Promise<void>;
     asyncDeleteCategory: (id:string) => Promise<void>
@@ -29,8 +29,8 @@ export const CategoryContextProvider: React.FC = ({ children }) => {
 
     const [categories, setCategories] = React.useState<Category[]>([])
 
-    const asyncCreateCategory: (icon: Icon, name: string) => Promise<Category> = async (icon, name) => {
-        const category = await services.categoryService.addCategory(icon, name)
+    const asyncCreateCategory: (icon: Icon, name: string, color:string) => Promise<Category> = async (icon, name, color) => {
+        const category = await services.categoryService.addCategory(icon, name, color)
         setCategories([ ...categories, category ])
         return category
     }

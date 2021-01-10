@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Alert, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../context/AuthContext";
 //import { useStoreState } from '../hooks/hooks';
