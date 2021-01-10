@@ -4,18 +4,21 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../navigators/MainRouter';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'Card'>;
+    navigation: StackNavigationProp<MainStackParamList ,'CardManagement'>;
 };
 
-const CardScreen: React.FC<Props> = ({ navigation }) => {
+const CardManagementScreen: React.FC<Props> = ({ navigation }) => {
+
+    // TODO - CardManagement
+
     return (
         <SafeAreaView style={styles.droidSafeArea}>
-            <Text>Profil</Text>
+            <Text>card management</Text>
         </SafeAreaView>
     );
 };
 
-export default CardScreen;
+export default CardManagementScreen;
 
 const styles = StyleSheet.create({
     droidSafeArea: {

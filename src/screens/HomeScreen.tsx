@@ -4,7 +4,12 @@ import { Alert, Modal, Platform, SafeAreaView, Text, TextInput, TouchableOpacity
 import Barcharts from "../chart/BarCharts";
 import { Bars } from "../chart/BarType";
 import { SelectionTypeEnum } from "../store/model/CurrentSelection";
-type Props = {};
+import { StackNavigationProp } from '@react-navigation/stack';
+import { MainStackParamList } from '../navigators/MainRouter';
+
+type Props = {
+  navigation: StackNavigationProp<MainStackParamList ,'Analytics'>;
+};
 
 // Format de données
 const data:Bars = [
@@ -121,25 +126,30 @@ const HomeScreen: React.FC<Props> = () => {
   const onClickBarGraph = () => {
     console.log("onClickBarGraph homescreen : ",currentSelection)
   }
-    return (
-<>
-        <Text>Home</Text>
-        <Text>test du mois {currentSelection?.id} - {currentSelection.selectionType}</Text>
-        {/* <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      /> */}
-      <Barcharts style={canvas} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
-</>
+  return (
+      <SafeAreaView style={styles.droidSafeArea}>
+          <Text>Home</Text>
+          <Text>test du mois {currentSelection?.id} - {currentSelection.selectionType}</Text>
+          {/* <Switch
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+          /> */}
+          <Barcharts style={canvas} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
+      </SafeAreaView>
     );
 };
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+    droidSafeArea: {
+      flex: 1,
+      width: "100%",
+      paddingTop: Platform.OS === "android" ? 25 : 0
+    },
     centeredView: {
       flex: 1,
       justifyContent: "center",
