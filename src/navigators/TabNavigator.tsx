@@ -22,7 +22,7 @@ const TabNavigator = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName={"Profil"} // TODO - dans la finalité mettre Analytics
+            initialRouteName={"Analytics"}
             tabBarOptions={{
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
