@@ -8,7 +8,9 @@ import TabNavigator from './TabNavigator';
 
 export type MainStackParamList = {
     Auth: undefined,
-    Analytics: undefined
+    Analytics: undefined,
+    Profil: undefined,
+    Card: undefined
 }
 
 export const Stack = createStackNavigator<MainStackParamList>();

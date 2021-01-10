@@ -1,12 +1,14 @@
 import * as React from 'react';
 import HomeScreen from '../screens/HomeScreen';
 import { Tab } from './MainRouter';
+import ProfilScreen from "../screens/ProfilScreen";
+import CardScreen from "../screens/CardScreen";
 // import { useStoreState } from '../store/hooks';
 
 const TabNavigator = () => {
     //const { theme } = useStoreState(state => state.themeModel)
 
-    function Home() {
+    function Analytics() {
 
         return (
             <HomeScreen/>
@@ -21,6 +23,7 @@ const TabNavigator = () => {
 
     return (
         <Tab.Navigator
+            initialRouteName={"Analytics"}
             tabBarOptions={{
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
@@ -37,9 +40,9 @@ const TabNavigator = () => {
                 }*/
             }}
         >
-            <Tab.Screen name="Note" component={Home} />
-            {/*<Tab.Screen name="Pass" component={Pass} />
-            <Tab.Screen name="Profil" component={ProfilScreen} />*/}
+            <Tab.Screen name="Card" component={CardScreen}/>
+            <Tab.Screen name="Analytics" component={Analytics} />
+            <Tab.Screen name="Profil" component={ProfilScreen}/>
         </Tab.Navigator>
     );
 };
