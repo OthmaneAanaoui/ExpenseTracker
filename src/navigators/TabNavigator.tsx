@@ -9,7 +9,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import ParamScreen from '../screens/ParamScreen';
 import TrackingScreen from '../screens/TrackingScreen';
 import { CategoryContextProvider } from '../context/CategoryContext';
-// import { useStoreState } from '../store/hooks';
 
 const TabNavigator = () => {
     //const { theme } = useStoreState(state => state.themeModel)
@@ -41,26 +40,27 @@ const TabNavigator = () => {
     return (
         <CategoryContextProvider>
             <Tab.Navigator
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                let tagsIcon;
-                    switch(route.name){
-                        case 'Solde':
-                            tagsIcon = <FontAwesome5 name="piggy-bank" size={30} color={color} />
-                            break;
-                        case 'Analytics':
-                            tagsIcon = <AntDesign name="barschart" size={30} color={color} />
-                            break;
-                        case 'Setting':
-                            tagsIcon = <AntDesign name="setting" size={30} color={color} />
-                            break;
-                        case 'Tracking':
-                            tagsIcon = <AntDesign name="profile" size={30} color={color} />
-                            break;
-                    }
-                return tagsIcon;
-                },
-            })}
+                initialRouteName={'Tracking'}
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let tagsIcon;
+                            switch(route.name){
+                                case 'Solde':
+                                    tagsIcon = <FontAwesome5 name="piggy-bank" size={30} color={color} />
+                                    break;
+                                case 'Analytics':
+                                    tagsIcon = <AntDesign name="barschart" size={30} color={color} />
+                                    break;
+                                case 'Setting':
+                                    tagsIcon = <AntDesign name="setting" size={30} color={color} />
+                                    break;
+                                case 'Tracking':
+                                    tagsIcon = <AntDesign name="profile" size={30} color={color} />
+                                    break;
+                            }
+                        return tagsIcon;
+                    },
+                })}
                 tabBarOptions={{
                     activeTintColor: 'white',
                     inactiveTintColor: 'grey',
