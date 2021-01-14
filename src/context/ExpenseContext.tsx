@@ -4,6 +4,7 @@ import services from "../services/index";
 import {Category} from "../types/Category";
 import { Expense } from "../types/Expense";
 import { Card } from "../types/types";
+import { useAuth } from "./AuthContext";
 
 type ExpenseContextType = {
     expenses: Expense[];
@@ -42,18 +43,18 @@ type ExpensesByCategory = {
 export const ExpenseContext = createContext<ExpenseContextType | null>(null)
 
 export const ExpenseContextProvider: React.FC = ({ children }) => {
-
+    const auth = useAuth()
     const [expenses, setExpenses] = React.useState<Expense[]>([])
 
     const asyncCreateExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
-        const expense = await services.expenseService.addExpense(name, idCategory, value, idCard, isIncome)
+        const expense = await services.expenseService.addExpense(auth.user!.uid, name, idCategory, value, idCard, isIncome)
         setExpenses([ ...expenses, expense ])
         return expense
     }
 
     const asyncGetAll: () => Promise<Expense[]> = async () => {
         try {
-            const listExpense: Expense[] = await services.expenseService.getExpenses()
+            const listExpense: Expense[] = await services.expenseService.getExpenses(auth.user!.uid)
             setExpenses(listExpense)
         } catch (err) {
             throw err
@@ -63,7 +64,7 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
 
     const asyncUpdateExpense: (expense:Expense) => Promise<void> = async(expense) => {
         try {
-            const updateExpense: Expense = await services.expenseService.updateExpense(expense)
+            const updateExpense: Expense = await services.expenseService.updateExpense(auth.user!.uid, expense)
             const index = expenses.findIndex(expense => updateExpense.id === expense.id)
             expenses[index] = updateExpense
         } catch (err) {
@@ -73,7 +74,7 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
 
     const asyncDeleteExpense = async (id:string) => {
         try{
-            await services.expenseService.deleteExpense(id)
+            await services.expenseService.deleteExpense(auth.user!.uid, id)
             const index = expenses.findIndex(expense => expense.id === id)
             setExpenses(expenses.splice(index,1))
         } catch (err) {

@@ -14,4 +14,3 @@ export type Card = {
   ExpirationDate: number,
   name: string
 }
-

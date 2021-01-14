@@ -1,7 +1,6 @@
 import * as React from 'react';
 import HomeScreen from '../screens/HomeScreen';
 import StatScreen from '../screens/StatScreen';
-// import { Tab } from './MainRouter';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfilNavigator from "./ProfilNavigator";
 import { AntDesign } from '@expo/vector-icons';
@@ -49,26 +48,27 @@ const TabNavigator = () => {
 
     return (        
             <Tab.Navigator
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                let tagsIcon;
-                    switch(route.name){
-                        case 'Solde':
-                            tagsIcon = <FontAwesome5 name="piggy-bank" size={30} color={color} />
-                            break;
-                        case 'Analytics':
-                            tagsIcon = <AntDesign name="barschart" size={30} color={color} />
-                            break;
-                        case 'Setting':
-                            tagsIcon = <AntDesign name="setting" size={30} color={color} />
-                            break;
-                        case 'Tracking':
-                            tagsIcon = <AntDesign name="profile" size={30} color={color} />
-                            break;
-                    }
-                return tagsIcon;
-                },
-            })}
+                initialRouteName={'Solde'}
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let tagsIcon;
+                            switch(route.name){
+                                case 'Solde':
+                                    tagsIcon = <FontAwesome5 name="piggy-bank" size={30} color={color} />
+                                    break;
+                                case 'Analytics':
+                                    tagsIcon = <AntDesign name="barschart" size={30} color={color} />
+                                    break;
+                                case 'Setting':
+                                    tagsIcon = <AntDesign name="setting" size={30} color={color} />
+                                    break;
+                                case 'Tracking':
+                                    tagsIcon = <AntDesign name="profile" size={30} color={color} />
+                                    break;
+                            }
+                        return tagsIcon;
+                    },
+                })}
                 tabBarOptions={{
                     activeTintColor: 'white',
                     inactiveTintColor: 'grey',

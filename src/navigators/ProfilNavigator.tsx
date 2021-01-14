@@ -7,9 +7,9 @@ import CategoryManagementScreen from "../screens/CategoryManagementScreen";
 
 export type MainStackParamList = {
     Setting: undefined,
-    CardManagement: undefined,
-    AccountManagement: undefined,
-    CategoryManagement: undefined
+    Cards: undefined,
+    Categories: undefined,
+    Account: undefined
 }
 
 const Stack = createStackNavigator<MainStackParamList>();
@@ -18,9 +18,9 @@ const ProfilNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Setting" component={ProfilScreen}/>
-            <Stack.Screen name="CardManagement" component={CardManagementScreen}/>
-            <Stack.Screen name="CategoryManagement" component={CategoryManagementScreen}/>
-            <Stack.Screen name="AccountManagement" component={AccountScreen}/>
+            <Stack.Screen name="Cards" component={CardManagementScreen}/>
+            <Stack.Screen name="Categories" component={CategoryManagementScreen}/>
+            <Stack.Screen name="Account" component={AccountScreen}/>
         </Stack.Navigator>
     );
 };

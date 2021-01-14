@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform} from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/MainRouter';
+import { MainStackParamList } from '../navigators/ProfilNavigator';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'CategoryManagement'>;
+    navigation: StackNavigationProp<MainStackParamList ,'Categories'>;
 };
 
 const CategoryManagementScreen: React.FC<Props> = ({ navigation }) => {
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     droidSafeArea: {
         flex: 1,
         width: "100%",
-        paddingTop: Platform.OS === "android" ? 25 : 0
+        paddingTop: Platform.OS === "android" ? 25 : 0,
+        backgroundColor:"#212227"
     },
 });

@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../navigators/MainRouter';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'CardManagement'>;
+    navigation: StackNavigationProp<MainStackParamList ,'Cards'>;
 };
 
 const CardManagementScreen: React.FC<Props> = ({ navigation }) => {
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     droidSafeArea: {
         flex: 1,
         width: "100%",
-        paddingTop: Platform.OS === "android" ? 25 : 0
+        paddingTop: Platform.OS === "android" ? 25 : 0,
+        backgroundColor:"#212227"
     },
 });
