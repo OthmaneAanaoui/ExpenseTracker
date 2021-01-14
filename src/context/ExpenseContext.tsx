@@ -1,7 +1,9 @@
 import React from "react";
 import { createContext, useContext } from "react";
 import services from "../services/index";
-import {Category, Card, Expense, CardType, ExpenseType} from "../types/types";
+import {Category} from "../types/Category";
+import { Expense } from "../types/Expense";
+import { Card } from "../types/types";
 
 type ExpenseContextType = {
     expenses: Expense[];
@@ -37,7 +39,7 @@ type ExpensesByCategory = {
     expenses:Expense[]
 }
 
-const ExpenseContext = createContext<ExpenseContextType | null>(null)
+export const ExpenseContext = createContext<ExpenseContextType | null>(null)
 
 export const ExpenseContextProvider: React.FC = ({ children }) => {
 
