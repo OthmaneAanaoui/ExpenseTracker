@@ -122,7 +122,7 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
                     {editionMsg ?
                         <Text style={styles.alert}>You need at least 6 characters in the password</Text>
                         :
-                        <Text></Text>
+                        <Text>hh</Text>
                     }
                 </View>
                 {editionPassword ?
@@ -157,7 +157,7 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
                 style={styles.logout}
                 onPress={logOut}
                 >
-                    Log Out
+                   <Text>Log Out</Text>
                 </TouchableOpacity>
             </View>
 

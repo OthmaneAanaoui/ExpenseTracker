@@ -74,6 +74,8 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
     const asyncDeleteExpense = async (id:string) => {
         try{
             await services.expenseService.deleteExpense(id)
+            const index = expenses.findIndex(expense => expense.id === id)
+            setExpenses(expenses.splice(index,1))
         } catch (err) {
             throw err
         }
