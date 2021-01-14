@@ -22,7 +22,7 @@ const TabNavigator = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName={"Analytics"}
+            initialRouteName={"Setting"} // TODO - mettre "Analytics"
             tabBarOptions={{
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
@@ -41,7 +41,7 @@ const TabNavigator = () => {
         >
             <Tab.Screen name="Card" component={CardScreen}/>
             <Tab.Screen name="Analytics" component={HomeScreen} />
-            <Tab.Screen name="Profil" component={ProfilNav}/>
+            <Tab.Screen name="Setting" component={ProfilNav}/>
         </Tab.Navigator>
     );
 };

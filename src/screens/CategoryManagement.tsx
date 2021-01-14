@@ -4,21 +4,21 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { MainStackParamList } from '../navigators/MainRouter';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'PasswordManagement'>;
+    navigation: StackNavigationProp<MainStackParamList ,'CategoryManagement'>;
 };
 
-const PasswordManagementScreen: React.FC<Props> = () => {
+const CategoryManagementScreen: React.FC<Props> = ({ navigation }) => {
 
-    // TODO - PasswordManagement
+    // TODO - CategoryManagement
 
     return (
         <SafeAreaView style={styles.droidSafeArea}>
-            <Text>password management</Text>
+            <Text>category management</Text>
         </SafeAreaView>
     );
 };
 
-export default PasswordManagementScreen;
+export default CategoryManagementScreen;
 
 const styles = StyleSheet.create({
     droidSafeArea: {

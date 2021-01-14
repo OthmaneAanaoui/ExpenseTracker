@@ -9,10 +9,12 @@ import TabNavigator from './TabNavigator';
 export type MainStackParamList = {
     Auth: undefined,
     Analytics: undefined,
-    Profil: undefined,
+    Setting: undefined,
     Card: undefined,
     PasswordManagement: undefined,
-    CardManagement: undefined
+    CardManagement: undefined,
+    AccountManagement: undefined,
+    CategoryManagement: undefined
 }
 
 export const Stack = createStackNavigator<MainStackParamList>();

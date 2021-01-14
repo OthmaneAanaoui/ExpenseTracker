@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Stack } from './MainRouter';
-import { useStoreState } from '../store/hooks';
 import ProfilScreen from "../screens/ProfilScreen";
-import PasswordManagementScreen from "../screens/PasswordManagmentScreen";
 import CardManagementScreen from "../screens/CardManagementScreen";
+import AccountScreen from "../screens/AccountScreen";
+import CategoryManagementScreen from "../screens/CategoryManagement";
 
 const ProfilNavigator = () => {
-    //const { theme } = useStoreState(state => state.themeModel)
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Profil" component={ProfilScreen}/>
-            <Stack.Screen name="PasswordManagement" component={PasswordManagementScreen}/>
+            <Stack.Screen name="Setting" component={ProfilScreen}/>
             <Stack.Screen name="CardManagement" component={CardManagementScreen}/>
+            <Stack.Screen name="CategoryManagement" component={CategoryManagementScreen}/>
+            <Stack.Screen name="AccountManagement" component={AccountScreen}/>
         </Stack.Navigator>
     );
 };
