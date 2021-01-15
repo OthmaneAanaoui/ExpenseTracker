@@ -1,5 +1,5 @@
 import { queryUser } from "../types/constants";
-import { Category, Icon } from "../types/Category";
+import { Category, CategoryType, Icon } from "../types/Category";
 import { useAuth } from "../context/AuthContext";
 
 const getQuery = () => {
@@ -29,7 +29,7 @@ export const getCategory: (id: string) => Promise<Category> = async (id) => {
 
 
 export const addCategory: (icon: Icon, name: string, color:string) => Promise<Category> = async (icon, name, color) => {
-  const category: Category = {
+  const category: CategoryType = {
     name: name,
     icon: icon,
     color: color,

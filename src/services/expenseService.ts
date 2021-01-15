@@ -1,6 +1,6 @@
 import { useAuth } from '../context/AuthContext';
 import { queryUser } from '../types/constants';
-import { Expense } from '../types/Expense';
+import { Expense, ExpenseType } from '../types/Expense';
 
 const getQuery = () => {
   const auth = useAuth()
@@ -27,7 +27,7 @@ export const getExpense: (id: string) => Promise<Expense> = async (id) => {
 }
 
 export const addExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
-  const expense: Expense = {
+  const expense: ExpenseType = {
     date: new Date().getTime(),
     name: name,
     idCategory: idCategory,

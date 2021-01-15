@@ -15,7 +15,7 @@ type props = {
     isIncome:boolean;
     name:string;
     value:number;
-    //closeDisplay:(() => void);
+    closeDisplay:(() => void);
 }
 
 const NewExpenseCard: React.FC<props> = (props) => {
@@ -33,13 +33,12 @@ const NewExpenseCard: React.FC<props> = (props) => {
     const car = useCard()
 
     useEffect(() => {
-        console.log("NewExpenseCard")
     }, [])
 
     const onCreate = () => {
         /*
         if(props.idExpense === "") exp?.asyncCreateExpense(props.name, props.idCategory, props.value, props.idCard, props.isIncome);*/
-        //props.closeDisplay
+        props.closeDisplay
     }
 
     const onSave = () => {
@@ -56,7 +55,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
             }
             exp?.asyncUpdateExpense(newExpense);
         }*/
-        //props.closeDisplay
+        props.closeDisplay
     }
 
     const toggleSwitch = () => {
@@ -65,24 +64,24 @@ const NewExpenseCard: React.FC<props> = (props) => {
 
     return (
         <View style={styles.container}>
-
-            <View style={[styles.eachView, styles.viewIncomeExpense]}>
-                <Text style={{color: 'white'}}> Expense </Text>
+            <View style={(styles.eachView, styles.viewIncomeExpense)}>
+                <Text style={{ color: 'white' }}> Expense </Text>
                 <Switch
-                    trackColor={{false: "#767577", true: "#f4f3f4"}}
+                    trackColor={{ false: "#767577", true: "#f4f3f4" }}
                     thumbColor={"#b6b4b6"}
                     onValueChange={toggleSwitch}
                     value={!isIncomes}
                 />
-                <Text style={{color: 'white'}}> Income </Text>
+                <Text style={{ color:'white' }}> Income </Text>
             </View>
 
+            <View style={styles.eachView}>
+                <Text style={{ color: 'white' }}> choice categories </Text>
+            </View>
 
-            <Text style={{color: 'white'}}> choice categories </Text> {/* TODO */}
-
-
-            <Text style={{color: 'white'}}> choice card </Text> {/* TODO */}
-
+            <View style={styles.eachView}>
+                <Text style={{color: 'white'}}> choice card </Text>
+            </View>
 
             <View style={[styles.eachView, styles.itemContainer]}>
                 <Text style={styles.item}> Name : </Text>
@@ -95,11 +94,6 @@ const NewExpenseCard: React.FC<props> = (props) => {
 
             <View style={[styles.eachView, styles.itemContainer]}>
                 <Text style={styles.item}> Value : </Text>
-                <TextInput
-                    keyboardType='numeric'
-                    style={styles.itemInput}
-
-                />
             </View>
 
             <View style={styles.eachView}>
