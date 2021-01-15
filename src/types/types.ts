@@ -1,4 +1,3 @@
-
 export type CardType = {
   id?: string,
   cardNumber: string,

@@ -1,9 +1,17 @@
 
 export type Category = {
+    id: string,
+    icon: Icon,
+    name: string,
+    color:string
+}
+
+export type CategoryType = {
     id?: string,
     idIcon: string,
     name: string,
     color:string
+<<<<<<< HEAD
   }
 
 export const initCategories = [
@@ -103,3 +111,6 @@ export const initCategories = [
     color: '#002b99',
   },
 ]
+=======
+}
+>>>>>>> 80b0e81... avancement modal
