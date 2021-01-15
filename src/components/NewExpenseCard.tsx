@@ -1,61 +1,115 @@
 import * as React from 'react';
-import {useContext, useState} from 'react';
-import {Text, View, StyleSheet, Switch} from 'react-native';
-import {Category} from "../types/Category";
+import {useContext, useEffect, useState} from 'react';
+import {Text, View, StyleSheet, Switch, Button, TextInput} from 'react-native';
 import {Input} from "react-native-elements";
+import { Expense } from '../types/Expense';
+import { useExpense } from "../context/ExpenseContext";
+import {useCategory} from "../context/CategoryContext";
+import {useCard} from "../context/BankcardContext";
 
-type Props = {
-    //category: Category;
-    isIncome: boolean;
-    name: string;
-    value: number;
+type props = {
+    isNew:boolean;
+    idExpense:string;
+    idCategory:string;
+    idCard:string;
+    isIncome:boolean;
+    name:string;
+    value:number;
+    //closeDisplay:(() => void);
 }
 
-const NewExpenseCard: React.FC<Props> = ({ isIncome, name, value }) => {
+const NewExpenseCard: React.FC<props> = (props) => {
 
-    const [isExpense, setIsExpense] = useState<boolean>(!isIncome)
-    //const [categories, setCategories] = useState<Category>(category)
-    const [title, setTitle] = useState<string>(name)
-    const [values, setValues] = useState<number>(value)
+    const [id, setId] = useState<string>(props.idExpense)
+    const [names, setNames] = useState<string>(props.name)
+    const [idCards, setIdCards] = useState<string>(props.idCard)
+    const [idCategories, setIdCategories] = useState<string>(props.idCategory)
+    const [values, setValues] = useState<number>(props.value)
+    const [isIncomes, setIncomes] = useState<boolean>(props.isIncome)
 
-    const toggleSwitch = () => setIsExpense(previousState => !previousState);
+
+    const cat = useCategory()
+    const exp = useExpense()
+    const car = useCard()
+
+    useEffect(() => {
+        console.log("NewExpenseCard")
+    }, [])
+
+    const onCreate = () => {
+        /*
+        if(props.idExpense === "") exp?.asyncCreateExpense(props.name, props.idCategory, props.value, props.idCard, props.isIncome);*/
+        //props.closeDisplay
+    }
+
+    const onSave = () => {
+        /*
+        if(id != "") {
+            const newExpense: Expense = {
+                id:id,
+                name: names,
+                idCard: idCards,
+                idCategory: idCategories,
+                value: values,
+                date: dates,
+                isIncome: isIncomes
+            }
+            exp?.asyncUpdateExpense(newExpense);
+        }*/
+        //props.closeDisplay
+    }
+
+    const toggleSwitch = () => {
+        setIncomes(!isIncomes);
+    }
 
     return (
         <View style={styles.container}>
 
             <View style={[styles.eachView, styles.viewIncomeExpense]}>
-                <Text style={{color:'white'}}> Expense </Text>
+                <Text style={{color: 'white'}}> Expense </Text>
                 <Switch
-                    trackColor={{ false: "#767577", true: "#f4f3f4" }}
+                    trackColor={{false: "#767577", true: "#f4f3f4"}}
                     thumbColor={"#b6b4b6"}
                     onValueChange={toggleSwitch}
-                    value={isExpense}
+                    value={!isIncomes}
                 />
-                <Text style={{color:'white'}}> Income </Text>
+                <Text style={{color: 'white'}}> Income </Text>
             </View>
 
 
-            <Text style={{color:'white'}}> choice categories </Text> {/* TODO */}
+            <Text style={{color: 'white'}}> choice categories </Text> {/* TODO */}
 
 
-            <Text style={{color:'white'}}> choice card </Text> {/* TODO */}
+            <Text style={{color: 'white'}}> choice card </Text> {/* TODO */}
+
 
             <View style={[styles.eachView, styles.itemContainer]}>
                 <Text style={styles.item}> Name : </Text>
                 <Input
                     style={styles.itemInput}
-                    value={name}
-                    onChangeText={value => setTitle(value)}
+                    value={names}
+                    onChangeText={value => setNames(value)}
                 />
             </View>
 
             <View style={[styles.eachView, styles.itemContainer]}>
                 <Text style={styles.item}> Value : </Text>
-                <Input
+                <TextInput
+                    keyboardType='numeric'
                     style={styles.itemInput}
-                    value={title}
-                    onChangeText={value => setTitle(value)}
+
                 />
+            </View>
+
+            <View style={styles.eachView}>
+                {props.isNew
+                    ?
+                    <Button title={"Create"} onPress={onCreate}/>
+                    :
+                    <Button title={"Save"} onPress={onSave}/>
+                }
+
             </View>
         </View>
     );

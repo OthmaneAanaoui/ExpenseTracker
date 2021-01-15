@@ -1,5 +1,3 @@
-import { firestore } from "firebase"
-
 export type CardType = {
   id?: string,
   cardNumber: string,

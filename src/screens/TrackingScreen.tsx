@@ -1,16 +1,40 @@
-import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import NewExpenseCard from "../components/NewExpenseCard";
-import {Category} from "../types/Category";
+import React, { Component } from 'react';
+import {Text, View, StyleSheet, Button} from 'react-native';
+import Modal from 'react-native-modal';
+import {useState} from "react";
+import NewExpenseCard from '../components/NewExpenseCard';
 
 interface TrackingScreenProps {}
 
 const TrackingScreen = (props: TrackingScreenProps) => {
-    //const cat:Category = undefined;
+
+    const [edition, setEdition] = useState<boolean>(false)
+
     return (
         <View style={styles.container}>
             <Text>TrackingScreen</Text>
-            <NewExpenseCard isIncome={true} name={""} value={0}/>
+
+            <Button title={"view modal"} onPress={() => setEdition(true)}/>
+
+            {
+                edition
+                    ?
+                    <Modal isVisible={edition} onBackdropPress={() => setEdition(false)}>
+                        <NewExpenseCard
+                            //closeDisplay={() => setEdition(false)}
+                            isNew={true}
+                            idExpense={""}
+                            idCategory={""}
+                            idCard={""}
+                            isIncome={true}
+                            name={""}
+                            value={0}
+                        />
+                    </Modal>
+                    :
+                    <Text>not visible</Text>
+            }
+
         </View>
     );
 };
