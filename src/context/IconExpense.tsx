@@ -1,7 +1,7 @@
 import React from "react"
 import { createContext, useContext } from "react"
 import services from "../services/index"
-import { Icon } from "../types/types"
+import { Icon } from "../types/Icon"
 
 type IconContextType = {
     icons: Icon[],

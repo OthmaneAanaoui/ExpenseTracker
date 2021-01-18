@@ -105,16 +105,18 @@ const HomeScreen: React.FC<Props> = () => {
             <View style={[styles.barSolde, {width:100}]}></View>
           </View>
         </View>
-        <ScrollView style={styles.viewLists}>
+        {/* <ScrollView style={styles.viewLists}> */}
+        <View style={styles.viewLists}>
           <FlatList
             data={testExpense}
             renderItem={({ item }) => (
               <ExpenseCard expense={item}/>
             )}
             keyExtractor={(item, index) => item.id! + index}
-            style={styles.list}
+            contentContainerStyle={styles.list}
           />
-        </ScrollView>
+          </View>
+        {/* </ScrollView> */}
         <TouchableOpacity style={styles.buttonIncome} onPress={() => onPressAddIncome()}>
             <AntDesign name="plus" size={30} color="white" />
         </TouchableOpacity>
@@ -294,10 +296,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   viewLists:{
+    flex:1,
     width:'95%',
   },
   list:{
-    // width:'100%'
+    flexGrow:1,
     paddingBottom:60
   }
   });

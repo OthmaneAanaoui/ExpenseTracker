@@ -2,17 +2,21 @@ import * as React from 'react';
 import HomeScreen from '../screens/HomeScreen';
 import StatScreen from '../screens/StatScreen';
 import { Tab } from './MainRouter';
-import CardScreen from "../screens/CardScreen";
 import ProfilNavigator from "./ProfilNavigator";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
-import ParamScreen from '../screens/ParamScreen';
 import TrackingScreen from '../screens/TrackingScreen';
 import { CategoryContextProvider } from '../context/CategoryContext';
 // import { useStoreState } from '../store/hooks';
+import { useStoreActions } from '../store/hooks';
+import { useEffect } from 'react';
 
 const TabNavigator = () => {
     //const { theme } = useStoreState(state => state.themeModel)
+  const getIconsCategory = useStoreActions(actions => actions.iconStoreModel.fetchIcons)
+  useEffect(() => {
+    getIconsCategory()
+  }, [])
 
     function ProfilNav() {
         return (

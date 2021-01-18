@@ -1,8 +1,4 @@
-export type Icon = {
-    id?: string,
-    name: string,
-    link: string
-  }
+import { Icon } from './Icon';
 
 export type Category = {
     id?: string,
