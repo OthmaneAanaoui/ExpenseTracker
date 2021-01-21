@@ -1,5 +1,5 @@
 import { queryUser } from '../types/constants';
-import { Expense, ExpenseType } from '../types/Expense';
+import { Expense } from '../types/Expense';
 
 const getQuery = (uid: string) => {
   return queryUser.doc(uid).collection('expenses')
@@ -24,13 +24,8 @@ export const getExpense: (uid: string, id: string) => Promise<Expense> = async (
   return newExpense;
 }
 
-<<<<<<< HEAD
 export const addExpense: (uid: string, name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (uid, name, idCategory, value, idCard, isIncome) => {
   const expense: Expense = {
-=======
-export const addExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
-  const expense: ExpenseType = {
->>>>>>> 16d10dd... modal save
     date: new Date().getTime(),
     name: name,
     idCategory: idCategory,

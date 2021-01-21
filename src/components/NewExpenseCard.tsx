@@ -129,7 +129,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                         <ModalDatePicker
                             button={<Text>Select Date</Text>}
                             locale="fr"
-                            onSelect={(date) => console.log(date) }
+                            onSelect={(date:any) => console.log(date) }
                             isHideOnSelect={true}
                             initialDate={props.isNew?new Date():date}
                         />

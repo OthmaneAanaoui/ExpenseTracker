@@ -1,10 +1,5 @@
 import { queryUser } from "../types/constants";
-<<<<<<< HEAD
 import { Category } from "../types/Category";
-=======
-import { Category, CategoryType, Icon } from "../types/Category";
-import { useAuth } from "../context/AuthContext";
->>>>>>> 16d10dd... modal save
 
 const getQuery = (uid: string) => {
   return queryUser.doc(uid).collection('category')
@@ -30,13 +25,8 @@ export const getCategory: (uid:string, id: string) => Promise<Category> = async 
 }
 
 
-<<<<<<< HEAD
 export const addCategory: (uid:string, idIcon: string, name: string, color:string) => Promise<Category> = async (uid, idIcon, name, color) => {
   const category: Category = {
-=======
-export const addCategory: (icon: Icon, name: string, color:string) => Promise<Category> = async (icon, name, color) => {
-  const category: CategoryType = {
->>>>>>> 16d10dd... modal save
     name: name,
     idIcon: idIcon,
     color: color,
