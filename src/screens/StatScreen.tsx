@@ -135,7 +135,7 @@ const StatScreen: React.FC<Props> = () => {
   <Text style={{color:"white", width:"100%", textAlign:"center", marginTop:10}}>Accueil</Text>
       <View style={styles.sectionMonth}>
         <View style={styles.headerSectionMonth}>
-        <View style={styles.buttonNavMonth}>
+          <View style={styles.buttonNavMonth}>
             <TouchableOpacity onPress={onClickPreviousYear} style={styles.buttonPrevMonth}>
               <AntDesign name="left" size={18} color="white" />
             </TouchableOpacity>
@@ -148,6 +148,7 @@ const StatScreen: React.FC<Props> = () => {
             <TouchableOpacity onPress={onClickPreviousMonth} style={styles.buttonPrevMonth}>
               <AntDesign name="left" size={18} color="white" />
             </TouchableOpacity>
+            <Text style={styles.textButtonNavYear}>Jan.</Text>
             <TouchableOpacity onPress={onClickNextMonth} style={styles.buttonNextmonth}>
               <AntDesign name="right" size={18} color="white" />
             </TouchableOpacity>
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
       marginRight:1,
       borderTopLeftRadius:30, 
       borderBottomLeftRadius:30,
+      justifyContent: "center",
       shadowColor: "#000",
       shadowOffset: {
         width: 0,
@@ -224,6 +226,7 @@ const styles = StyleSheet.create({
       alignItems: "flex-end",
       borderTopRightRadius:30, 
       borderBottomRightRadius:30,
+      justifyContent: "center",
       shadowColor: "#000",
       shadowOffset: {
         width: 0,
