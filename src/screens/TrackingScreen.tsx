@@ -19,25 +19,19 @@ const TrackingScreen = (props: TrackingScreenProps) => {
             <Text>TrackingScreen</Text>
 
             <Button title={"view modal"} onPress={() => setModalVisible(true)} />
-            <Button title={"close modal"} onPress={() => setModalVisible(false)} />
-
-            <Modal
-                animationType="slide"
-                transparent={false}
+            
+            <NewExpenseCard
                 visible={state}
-                onRequestClose={() => {console.log('Modal has been closed.');}}
-            >
-                <NewExpenseCard
-                    closeDisplay={() => setModalVisible(false)}
-                    isNew={true}
-                    idExpense={""}
-                    idCategory={""}
-                    idCard={""}
-                    isIncome={true}
-                    name={""}
-                    value={0}
-                />
-            </Modal>
+                closeDisplay={() => setModalVisible(false)}
+                isNew={true}
+                idExpense={""}
+                idCategory={""}
+                idCard={""}
+                isIncome={true}
+                name={""}
+                date={0}
+                value={0}
+            />
         </View>
     );
 };
