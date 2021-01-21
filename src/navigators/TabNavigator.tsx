@@ -40,7 +40,7 @@ const TabNavigator = () => {
     return (
         <CategoryContextProvider>
             <Tab.Navigator
-                initialRouteName={'Tracking'}
+                initialRouteName={'Solde'}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                         let tagsIcon;

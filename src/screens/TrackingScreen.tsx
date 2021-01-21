@@ -3,8 +3,6 @@ import {Modal, Text, View, StyleSheet, Button} from 'react-native';
 //import Modal from 'react-native-modal';
 import {useState} from "react";
 import NewExpenseCard from '../components/NewExpenseCard';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/MainRouter';
 
 interface TrackingScreenProps {}
 
@@ -19,6 +17,7 @@ const TrackingScreen = (props: TrackingScreenProps) => {
     return (
         <View style={styles.container}>
             <Text>TrackingScreen</Text>
+            <Text>new branch</Text>
 
             <Button title={"view modal"} onPress={() => setModalVisible(true)} />
             
