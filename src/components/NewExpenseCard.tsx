@@ -40,35 +40,18 @@ const NewExpenseCard: React.FC<props> = (props) => {
     const exp = useExpense()
     const car = useCard()
 
-    const dataCard = [{ // TODO - get to context
-        label: 'card1',
-        value:'idCard1'
-    },{
-        label: 'card2',
-        value:'idCard2'
-    }];
-
-    const dataCategory = [{ // TODO - get to context
-        label: 'category1',
-        value:'idCategory1'
-    },{
-        label: 'category2',
-        value:'idCategory2'
-    }];
-
     useEffect(() => {
     }, [])
 
     const onCreate = () => {
-
-        if(props.isNew == true && props.idExpense === "") exp?.asyncCreateExpense(props.name, props.idCategory, props.value, props.idCard, props.isIncome);
+        if(props.isNew == true && props.idExpense === "" && idCards != "0" && idCategories != "0") exp?.asyncCreateExpense(props.name, props.idCategory, props.value, props.idCard, props.isIncome);
         props.closeDisplay
         setState(false)
     }
 
     const onSave = () => {
 
-        if(props.isNew == false && id != "") {
+        if(props.isNew == false && id != "" && idCards != "0" && idCategories != "0") {
             const newExpense: Expense = {
                 id:id,
                 name: names,
@@ -95,26 +78,24 @@ const NewExpenseCard: React.FC<props> = (props) => {
     }
 
     const pickerCategory = () => {
-        // TODO - get to context
-        var tab = [];
-        // var tabCategory = cat?.getCatgories();
-        for(var i = 0; i<dataCategory.length; i++){
+        var tab = [<Picker.Item label="Choose a Category" value={"0"} />];
+        var tabCategory = cat?.getCatgories();
+        tabCategory?.forEach((category) => {
             tab.push(
-                <Picker.Item label={dataCategory[i].label} value={dataCategory[i].value} />
+                <Picker.Item label={category.name} value={category.id} />
             )
-        }
+        })
         return tab;
     }
 
     const pickerCard = () => {
-        // TODO - get to context
-        var tab = [];
-        //var tabCard = car?.getCards();
-        for(var i = 0; i<dataCard.length; i++){
+        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];;
+        var tabCard = car?.getCards();
+        tabCard?.forEach((card) => {
             tab.push(
-                <Picker.Item label={dataCard[i].label} value={dataCard[i].value} />
+                <Picker.Item label={card.name} value={card.id} />
             )
-        }
+        })
         return tab;
     }
 
