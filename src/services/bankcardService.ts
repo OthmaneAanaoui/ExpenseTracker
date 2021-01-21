@@ -1,5 +1,5 @@
 import { queryUser } from "../types/constants";
-import { Card, CardType } from "../types/types";
+import { Card } from "../types/Card";
 
 const getQuery = (uid: string) => {
   return queryUser.doc(uid).collection('bankCard')
@@ -15,7 +15,7 @@ export const getCards: (uid:string) => Promise<Card[]> = async (uid) => {
 };
 
 export const addCard: (uid:string, cardNumber: string, cardValidationCode: string, ExpirationDate: number, name: string) => Promise<Card> = async (uid, cardNumber, cardValidationCode, ExpirationDate, name) => {
-  const card: CardType = {
+  const card: Card = {
     cardNumber: cardNumber,
     cardValidationCode: cardValidationCode,
     ExpirationDate: ExpirationDate,

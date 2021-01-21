@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 import services from "../services/index";
 import {Category} from "../types/Category";
 import { Expense } from "../types/Expense";
-import { Card } from "../types/types";
+import { Card } from "../types/Card";
 import { useAuth } from "./AuthContext";
 
 type ExpenseContextType = {
