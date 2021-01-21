@@ -11,10 +11,10 @@ export type MainStackParamList = {
     Analytics: undefined,
     Setting: undefined,
     Card: undefined,
-    PasswordManagement: undefined,
-    CardManagement: undefined,
-    AccountManagement: undefined,
-    CategoryManagement: undefined
+    Cards: undefined,
+    Account: undefined,
+    Categories: undefined,
+    Tracking: undefined
 }
 
 export const Stack = createStackNavigator<MainStackParamList>();

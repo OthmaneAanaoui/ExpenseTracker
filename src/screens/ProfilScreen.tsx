@@ -11,26 +11,6 @@ type Props = {
 };
 
 const ProfilScreen: React.FC<Props> = ({ navigation }) => {
-    const auth = useAuth();
-
-    const loadEmail = () => {
-        let email = auth.user?.email?.toString;
-        if( email === undefined ) return "";
-        else return email.toString();
-    }
-
-    const [edition, setEdition] = useState(false)
-    const [inputEmail, setInputEmail] = useState<string>(loadEmail)
-
-
-
-    const changePassword = () => {
-        navigation.navigate("PasswordManagement")
-    }
-
-    const cardManagement = () => {
-        navigation.navigate("CardManagement")
-    }
 
     return (
         <SafeAreaView style={styles.droidSafeArea}>
@@ -39,7 +19,7 @@ const ProfilScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.container}>
                     <TouchableOpacity
                         style={styles.pictureTouchable}
-                        onPress={() => {navigation.navigate("AccountManagement")}}
+                        onPress={() => {navigation.navigate("Account")}}
                     >
                         <MaterialCommunityIcons name="account" size={50} color="black" />
                     </TouchableOpacity>
@@ -49,7 +29,7 @@ const ProfilScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.container}>
                     <TouchableOpacity
                         style={styles.pictureTouchable}
-                        onPress={() => {navigation.navigate("CategoryManagement")}}
+                        onPress={() => {navigation.navigate("Categories")}}
                     >
                         <MaterialCommunityIcons name="bookmark-multiple-outline" size={45} color="black" />
                     </TouchableOpacity>
@@ -59,7 +39,7 @@ const ProfilScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.container}>
                     <TouchableOpacity
                         style={styles.pictureTouchable}
-                        onPress={() => {navigation.navigate("CardManagement")}}
+                        onPress={() => {navigation.navigate("Cards")}}
                     >
                         <AntDesign name="creditcard" size={45} color="black" />
                     </TouchableOpacity>
@@ -78,7 +58,8 @@ const styles = StyleSheet.create({ // TODO - ProfilScreen - finir stylesheet
     droidSafeArea: {
         flex: 1,
         width: "100%",
-        paddingTop: Platform.OS === "android" ? 25 : 0
+        paddingTop: Platform.OS === "android" ? 25 : 0,
+        backgroundColor:"#212227"
     },
     menu:{
         marginTop: 50,
@@ -99,6 +80,7 @@ const styles = StyleSheet.create({ // TODO - ProfilScreen - finir stylesheet
         paddingTop: 5
     },
     titleTouchable:{
-        fontStyle: 'italic'
+        fontStyle: 'italic',
+        color: 'white'
     }
 });

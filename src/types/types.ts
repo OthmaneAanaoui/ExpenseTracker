@@ -1,5 +1,3 @@
-import { firestore } from "firebase"
-
 export type CardType = {
   id?: string,
   cardNumber: string,
@@ -15,4 +13,3 @@ export type Card = {
   ExpirationDate: number,
   name: string
 }
-

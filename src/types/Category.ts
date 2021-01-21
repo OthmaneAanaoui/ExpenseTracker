@@ -5,8 +5,15 @@ export type Icon = {
   }
 
 export type Category = {
+    id: string,
+    icon: Icon,
+    name: string,
+    color:string
+}
+
+export type CategoryType = {
     id?: string,
     icon: Icon,
     name: string,
     color:string
-  }
+}

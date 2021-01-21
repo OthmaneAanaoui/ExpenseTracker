@@ -8,7 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'AccountManagement'>;
+    navigation: StackNavigationProp<MainStackParamList ,'Account'>;
 };
 
 const AccountScreen: React.FC<Props> = ({ navigation }) => {
@@ -75,8 +75,6 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.droidSafeArea}>
-            <Text style={styles.title}>Account</Text>
-
             <View style={styles.container}>
                 <View style={styles.containerInformation}>
                     {editionEmail ?
@@ -157,7 +155,7 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
                 style={styles.logout}
                 onPress={logOut}
                 >
-                   <Text>Log Out</Text>
+                    <Text style={{color:'white'}}> Log Out </Text>
                 </TouchableOpacity>
             </View>
 
@@ -171,17 +169,12 @@ const styles = StyleSheet.create({
     droidSafeArea: {
         flex: 1,
         width: "100%",
-        paddingTop: Platform.OS === "android" ? 25 : 0
-    },
-    title:{
-        textAlign: "center",
-        fontSize: 16,
-        fontWeight: "bold",
-        marginTop: 15,
-        marginBottom: 30
+        paddingTop: Platform.OS === "android" ? 25 : 0,
+        backgroundColor:"#212227"
     },
     information: {
-        textAlign: "left"
+        textAlign: "left",
+        color: "white"
     },
     container:{
         flexDirection: 'row',
@@ -195,8 +188,10 @@ const styles = StyleSheet.create({
     buttonEditNote:{
         flex:1,
         justifyContent: 'center',
-        alignItems: 'flex-end',
-        marginRight:10
+        alignItems: 'center',
+        marginRight:10,
+        borderRadius: 50,
+        backgroundColor: 'white'
     },
     viewButtonsEdtion: {
         flex:1,
@@ -206,6 +201,7 @@ const styles = StyleSheet.create({
     },
     input:{
         fontSize: 15,
+        color: "white"
     },
     alert:{
         fontSize:12,
