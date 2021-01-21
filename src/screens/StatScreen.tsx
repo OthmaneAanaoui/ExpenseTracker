@@ -5,6 +5,10 @@ import Barcharts from "../chart/BarCharts";
 import { Bars } from "../chart/BarType";
 import { SelectionTypeEnum } from "../store/model/CurrentSelection";
 import { AntDesign } from '@expo/vector-icons'; 
+import Item from '../components/Categories'
+import { Category,categories } from '../types/Category';
+import { FlatList } from "react-native-gesture-handler";
+
 type Props = {};
 
 // Format de données
@@ -155,7 +159,23 @@ const StatScreen: React.FC<Props> = () => {
         </View>
         <Barcharts style={styles.barCharStyle} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
       </View>
+
+
+      <FlatList
+      style={{marginHorizontal:20,marginBottom:20,marginRight:10}}
+      data={categories}
+      horizontal
+      renderItem ={({item})=>(
+      <Item id={item.id} icon={item.icon} name={item.name} color={item.color} />
+    )}
+      /> 
+
+     
 </SafeAreaView>
+
+
+
+
     );
 
 };
