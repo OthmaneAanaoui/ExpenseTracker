@@ -1,19 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { useCategory } from '../context/CategoryContext';
 import { useExpense } from '../context/ExpenseContext';
+import { getFormatDate } from '../model/Date';
+import { Category } from '../types/Category';
 import { Expense } from '../types/Expense';
 import IconComponent from './IconComponent';
-
 interface ExpenseCardProps {
   expense:Expense;
 }
 
 const ExpenseCard = (props: ExpenseCardProps) => {
   const categories = useCategory();
-  const category = categories?.getCategoryById(props.expense?.idCategory)
+  const [category, setCategory] = useState<Category>()
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const expenseContext = useExpense()
@@ -24,6 +25,11 @@ const ExpenseCard = (props: ExpenseCardProps) => {
     }
     setModalDeleteVisible(!modalDeleteVisible)
   }
+
+  useEffect(() => {
+    const category = categories?.getCategoryById(props.expense?.idCategory)
+    setCategory(category)
+  },[])
 
   return (
     <View style={styles.container}>
@@ -36,11 +42,11 @@ const ExpenseCard = (props: ExpenseCardProps) => {
       <TouchableOpacity onPress={() => setEditMode(!editMode)}>
         <View style={styles.ExpenseView}>
           <View style={[styles.categoryView,{backgroundColor:category?.color}]}>
-            <IconComponent iconId={category?.icon.id}/>
+            <IconComponent idIcon={category?.idIcon}/>
           </View>
           <View style={styles.information}>
             <View style={styles.topLine}>
-              <Text style={styles.date}>{props.expense?.date}</Text>
+              <Text style={styles.date}>{getFormatDate(props.expense?.date)}</Text>
             </View>
             <View style={styles.bottomLine}>
               <Text numberOfLines={editMode ? 4:1} style={styles.description}>{props.expense?.name}</Text>

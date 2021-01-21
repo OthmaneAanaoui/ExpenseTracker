@@ -1,21 +1,26 @@
 import * as React from 'react';
 import HomeScreen from '../screens/HomeScreen';
 import StatScreen from '../screens/StatScreen';
-import { Tab } from './MainRouter';
+// import { Tab } from './MainRouter';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfilNavigator from "./ProfilNavigator";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import TrackingScreen from '../screens/TrackingScreen';
-import { CategoryContextProvider } from '../context/CategoryContext';
 // import { useStoreState } from '../store/hooks';
 import { useStoreActions } from '../store/hooks';
 import { useEffect } from 'react';
+import { useCategory } from '../context/CategoryContext';
+
+export const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-    //const { theme } = useStoreState(state => state.themeModel)
   const getIconsCategory = useStoreActions(actions => actions.iconStoreModel.fetchIcons)
+  const categoryContext = useCategory()
+
   useEffect(() => {
     getIconsCategory()
+    categoryContext?.asyncGetAll()
   }, [])
 
     function ProfilNav() {
@@ -42,8 +47,7 @@ const TabNavigator = () => {
         )
     }
 
-    return (
-        <CategoryContextProvider>
+    return (        
             <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
@@ -83,7 +87,6 @@ const TabNavigator = () => {
                 <Tab.Screen name="Analytics" component={Stats} />
                 <Tab.Screen name="Setting" component={ProfilNav} />
             </Tab.Navigator>
-        </CategoryContextProvider>
     );
 };
 

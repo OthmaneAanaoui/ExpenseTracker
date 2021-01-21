@@ -38,6 +38,8 @@ const iconStoreModel: IconStoreModel = {
         let icons = await services.iconService.getIcons()
         if(icons === undefined) {
             icons = await services.iconService.getLocalIcons()
+        } else {
+            services.iconService.setLocalIcons(icons)
         }
 		actions.setIcons(icons)
     })

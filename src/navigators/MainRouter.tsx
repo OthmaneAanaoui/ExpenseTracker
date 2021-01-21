@@ -2,23 +2,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from '../context/AuthContext';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AuthNavigator from './AuthNavigator';
 import TabNavigator from './TabNavigator';
+import { CategoryContextProvider } from '../context/CategoryContext';
 
 export type MainStackParamList = {
     Auth: undefined,
-    Analytics: undefined,
+    Solde:undefined,
+    // Analytics: undefined,
     Setting: undefined,
-    Card: undefined,
-    PasswordManagement: undefined,
+    // Card: undefined,
+    // PasswordManagement: undefined,
     CardManagement: undefined,
     AccountManagement: undefined,
     CategoryManagement: undefined
 }
 
 export const Stack = createStackNavigator<MainStackParamList>();
-export const Tab = createBottomTabNavigator();
+
 
 const MainRouter = () => {
     const auth = useAuth()
@@ -37,7 +38,9 @@ const MainRouter = () => {
 
     return (
         <NavigationContainer>
-            {redirection()}
+            <CategoryContextProvider>
+                {redirection()}
+            </CategoryContextProvider>
         </NavigationContainer>
     )
 }

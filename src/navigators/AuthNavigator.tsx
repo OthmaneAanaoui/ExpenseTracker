@@ -1,21 +1,22 @@
 import * as React from 'react';
 import AuthScreen from '../screens/AuthScreen';
-//import { useStoreState } from '../store/hooks';
-import { Stack } from './MainRouter';
+import { createStackNavigator } from '@react-navigation/stack';
+
+export type MainStackParamList = {
+    Auth: undefined,
+}
+
+export const Stack = createStackNavigator<MainStackParamList>();
 
 const AuthNavigator = () => {
-    //const { theme } = useStoreState(state => state.themeModel)
-
     return (
-        <Stack.Navigator initialRouteName="Analytics">
-            <Stack.Screen name="Auth" component={AuthScreen} /*options={{
-
+        <Stack.Navigator>
+            <Stack.Screen name="Auth" component={AuthScreen} options={{
                 headerStyle: {
-                    backgroundColor: theme.appBackgroundColor,
+                    backgroundColor: "#212227",
                 },
-                headerTintColor: theme.textColor }}/>*/
-                />
-        </Stack.Navigator>
+                headerTintColor: "white" }}/>
+         </Stack.Navigator>
     );
 };
 

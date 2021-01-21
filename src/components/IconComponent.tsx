@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; 
 
 import { useStoreState } from '../store/hooks';
 
@@ -13,7 +14,7 @@ interface IconComponentProps {
     iconName?:string;
     size?:number;
     color?:string;
-    iconId?:string;
+    idIcon?:string;
 }
 
 const IconComponent = (props: IconComponentProps) => {
@@ -24,11 +25,11 @@ const getIconById = (id:string) => {
     return icon
 }
 
-const getIconTags = (lib?: string, name?: any, _size?: number, _color?: string, iconId?: string) => {
+const getIconTags = (lib?: string, name?: any, _size?: number, _color?: string, idIcon?: string) => {
     let tag:any =<></>;
     let icon;
-    if(iconId !== undefined) {
-        icon = getIconById(iconId)
+    if(idIcon !== undefined) {
+        icon = getIconById(idIcon)
     }
     const nameIcon = icon?.iconName !== undefined ? icon.iconName : name;
     const importIcon = icon?.import !== undefined ? icon.import : lib;
@@ -53,13 +54,16 @@ const getIconTags = (lib?: string, name?: any, _size?: number, _color?: string, 
         case 'FontAwesome5':
             tag = <FontAwesome5 name={nameIcon} size={size} color={color} />
             break;
+        case 'Ionicons':
+            tag = <Ionicons name={nameIcon} size={size} color={color} />
+            break;
     }
     return tag
 }
 
   return (
     <>
-        {getIconTags(props.import, props.iconName, props.size, props.color, props.iconId)}
+        {getIconTags(props.import, props.iconName, props.size, props.color, props.idIcon)}
     </>
   );
 };
