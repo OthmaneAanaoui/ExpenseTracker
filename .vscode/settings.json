@@ -3,6 +3,7 @@
         "appspot",
         "expensetracker",
         "firebaseapp",
-        "firestore"
+        "firestore",
+        "sublist"
     ]
 }

@@ -89,7 +89,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
     }
 
     const pickerCard = () => {
-        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];;
+        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];
         var tabCard = car?.getCards();
         tabCard?.forEach((card) => {
             tab.push(

@@ -12,8 +12,9 @@ type ExpenseContextType = {
     asyncUpdateExpense: (expense:Expense) => Promise<void>;
     asyncDeleteExpense: (id:string) => Promise<void>;
     getExpenseById: (id:string) => Expense;
-    getExpenseByCard: (idCard: string) => Expense[];
-    getExpenseByCategory: (idCategory: string) => Expense[];
+    getExpenseByCard: (idCard: string) => Promise<Expense[]>;
+    getExpenseByCategory: (idCategory: string) => Promise<Expense[]>;
+    getExpenseByDate: (startDate: Date, endDate: Date) => Promise<Expense[]>;
     getExpenses: () => Expense[];
 }
 
@@ -47,13 +48,14 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
 
     const asyncCreateExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
         const expense = await services.expenseService.addExpense(name, idCategory, value, idCard, isIncome)
-        setExpenses([ ...expenses, expense ])
+        setExpenses([...expenses, expense].sort((a, b) => a.date - b.date));
         return expense
     }
 
     const asyncGetAll: () => Promise<Expense[]> = async () => {
         try {
             const listExpense: Expense[] = await services.expenseService.getExpenses()
+            listExpense.sort((a, b) => a.date - b.date);
             setExpenses(listExpense)
         } catch (err) {
             throw err
@@ -86,20 +88,22 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
         return expenses[index]
     }
 
-    const getExpenseByCard = (idCard:string) => {
-        const newExpenses: Expense[] = []
-        expenses.forEach(expense => {
-            if(expense.idCard === idCard) newExpenses.push(expense)
-        })
+    const getExpenseByCard = async (idCard:string) => {
+        const newExpenses = await services.expenseService.getExpenseByCard(idCard);
+        newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
     }
 
-    const getExpenseByCategory = (idCategory:string) => {
-        const newExpenses: Expense[] = []
-        expenses.forEach(expense => {
-            if(expense.idCategory === idCategory) newExpenses.push (expense)
-        })
+    const getExpenseByCategory = async (idCategory:string) => {
+        const newExpenses = await services.expenseService.getExpenseByCategory(idCategory);
+        newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
+    }
+
+    const getExpenseByDate = async (startDate: Date, endDate: Date) => {
+        const newExpenses = await services.expenseService.getExpenseByDate(startDate, endDate);
+        newExpenses.sort((a, b) => a.date - b.date);
+        return newExpenses;
     }
 
     const getExpenses = () => {
@@ -117,6 +121,7 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
                 getExpenseById,
                 getExpenseByCard,
                 getExpenseByCategory,
+                getExpenseByDate,
                 getExpenses
             }}>
             {children}

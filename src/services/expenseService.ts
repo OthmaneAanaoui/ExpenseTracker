@@ -63,3 +63,12 @@ export const getExpenseByCategory: (idCategory: string) => Promise<Expense[]> = 
     })
   return newExpenses
 }
+
+export const getExpenseByDate: (startDate: Date, endDate: Date) => Promise<Expense[]> = async (startDate, endDate) => {
+  let newExpenses = getExpenses().then(expenses => {
+    return expenses.filter(item => {
+      item.date>=startDate.valueOf() && item.date<=endDate.valueOf()
+    })
+  })
+  return newExpenses;
+}
