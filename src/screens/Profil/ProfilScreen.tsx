@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform, Button, Image} from "react-native";
-import { Input } from 'react-native-elements';
+import * as React from 'react';
+import {SafeAreaView, Text, TouchableOpacity, View, StyleSheet, Platform } from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/ProfilNavigator';
-import {useAuth} from "../context/AuthContext";
+import { ProfilStackParamList } from '../../navigators/ProfilNavigator';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'Setting'>;
+    navigation: StackNavigationProp<ProfilStackParamList ,'Setting'>;
 };
 
 const ProfilScreen: React.FC<Props> = ({ navigation }) => {

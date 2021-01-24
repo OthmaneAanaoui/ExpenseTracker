@@ -36,7 +36,7 @@ const HomeScreen: React.FC<Props> = () => {
   const testExpense:Expense[] = [{
     id:"11",
     name: "Mes premières courses",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "TH3IwH7f9FqCBgU6kU4Q",
     date: Date.now(),
     value: 124.57,
     idCard: "123",
@@ -45,7 +45,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "YIFsvV0ATAOoGKxSlvoq",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -54,7 +54,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "K9vfaD4ksklyHGDtyLnP",
+    idCategory: "iwOm7gQIPPlqsPhfBSE7",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -63,7 +63,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "aV0uxGRfSLShKmlIdjIO",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -72,7 +72,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Contrôle technique",
-    idCategory: "ZKLP5VYkXenhP1Dz9qi5",
+    idCategory: "aV0uxGRfSLShKmlIdjIO",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
