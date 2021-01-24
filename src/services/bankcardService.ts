@@ -1,14 +1,12 @@
-import { useAuth } from "../context/AuthContext";
 import { queryUser } from "../types/constants";
-import { Card, CardType } from "../types/types";
+import { Card } from "../types/Card";
 
-const getQuery = () => {
-  const auth = useAuth()
-  return queryUser.doc(auth.user?.uid).collection('bankCard')
+const getQuery = (uid: string) => {
+  return queryUser.doc(uid).collection('bankCard')
 }
 
-export const getCards: () => Promise<Card[]> = async () => {
-  const querySnapshot = await getQuery().get();
+export const getCards: (uid:string) => Promise<Card[]> = async (uid) => {
+  const querySnapshot = await getQuery(uid).get();
   let cards: Card[] = querySnapshot.docs.map((doc) => {
     const data = doc.data() as Card;
     return { ...data, id: doc.id };
@@ -16,26 +14,26 @@ export const getCards: () => Promise<Card[]> = async () => {
   return cards;
 };
 
-export const addCard: (cardNumber: string, cardValidationCode: string, ExpirationDate: number, name: string) => Promise<Card> = async (cardNumber, cardValidationCode, ExpirationDate, name) => {
-  const card: CardType = {
+export const addCard: (uid:string, cardNumber: string, cardValidationCode: string, ExpirationDate: number, name: string) => Promise<Card> = async (uid, cardNumber, cardValidationCode, ExpirationDate, name) => {
+  const card: Card = {
     cardNumber: cardNumber,
     cardValidationCode: cardValidationCode,
     ExpirationDate: ExpirationDate,
     name: name
   };
-  const doc = await getQuery().add(card);
+  const doc = await getQuery(uid).add(card);
   const newCard: Card = { ...card, id: doc.id };
   return newCard;
 };
 
 
-export const updateCard: (card:Card) => Promise<Card> = async (card) => {
+export const updateCard: (uid:string, card:Card) => Promise<Card> = async (uid, card) => {
     const updateCard = {...card}
-    await getQuery().doc(card.id).update(updateCard);
+    await getQuery(uid).doc(card.id).update(updateCard);
   return updateCard;
 };
 
 
-export const deleteCard: (id: string) => Promise<void> = async (id) => {
-    await getQuery().doc(id).delete();
+export const deleteCard: (uid:string, id: string) => Promise<void> = async (uid, id) => {
+    await getQuery(uid).doc(id).delete();
 };

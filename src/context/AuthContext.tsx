@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import * as firebase from "firebase";
 import { createContext, useContext } from "react"
+import { initBase } from "../model/initBase";
 
 type AuthContextType = {
     isSignedIn: boolean,
@@ -39,6 +40,7 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     useEffect(() => {
         const unsubscribe = firebase.auth().onAuthStateChanged((_user) => {
             if (_user) {
+                initBase(_user)
                 setAuth({
                     user: _user,
                     isSignedIn: true

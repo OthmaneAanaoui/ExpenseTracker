@@ -1,5 +1,5 @@
 import './src/firebase/firebase';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AuthContextProvider } from "./src/context/AuthContext";
 import MainRouter from "./src/navigators/MainRouter";
 import { createStore, StoreProvider } from 'easy-peasy';

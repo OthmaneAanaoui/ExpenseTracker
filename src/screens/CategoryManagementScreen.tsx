@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform} from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/MainRouter';
+import { MainStackParamList } from '../navigators/ProfilNavigator';
 
 type Props = {
     navigation: StackNavigationProp<MainStackParamList ,'Categories'>;

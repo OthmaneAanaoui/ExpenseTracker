@@ -41,7 +41,8 @@ const NewExpenseCard: React.FC<props> = (props) => {
     const car = useCard()
 
     useEffect(() => {
-    }, [])
+        setState(props.visible)
+    }, [props.visible])
 
     const onCreate = () => {
         if(props.isNew == true && props.idExpense === "" && idCards != "0" && idCategories != "0") exp?.asyncCreateExpense(props.name, props.idCategory, props.value, props.idCard, props.isIncome);
@@ -89,7 +90,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
     }
 
     const pickerCard = () => {
-        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];;
+        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];
         var tabCard = car?.getCards();
         tabCard?.forEach((card) => {
             tab.push(
@@ -121,7 +122,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                 animationType="slide"
                 transparent={false}
                 visible={state}
-                onRequestClose={() => { console.log('Modal has been closed.'); }}
+                onRequestClose={() => props.closeDisplay()}
             >
                 <View style={styles.eachView}>
                     <Text style={styles.date}>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</Text>
@@ -129,7 +130,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                         <ModalDatePicker
                             button={<Text>Select Date</Text>}
                             locale="fr"
-                            onSelect={(date) => console.log(date) }
+                            onSelect={(date:any) => console.log(date) }
                             isHideOnSelect={true}
                             initialDate={props.isNew?new Date():date}
                         />
