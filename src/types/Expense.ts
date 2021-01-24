@@ -7,3 +7,10 @@ export type Expense = {
     idCard: string,
     isIncome: boolean
   }
+
+  
+  
+
+
+
+  

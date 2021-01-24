@@ -110,9 +110,15 @@ const data:Bars = [
 }
 ]
 
+
+
 const StatScreen: React.FC<Props> = () => {
+  
   const [isEnabled, setIsEnabled] = useState(false);
   const { currentSelection } = useStoreState(state => state.currentSelectionModel)
+
+  
+  
 
   const onClickBarGraph = () => {
     console.log("onClickBarGraph homescreen : ",currentSelection)
@@ -133,9 +139,12 @@ const StatScreen: React.FC<Props> = () => {
   const onClickNextYear = () => {
     console.log("next year")
   }
-
+  
+  
     return (
+      
 <SafeAreaView style={styles.droidSafeArea}>
+
   <Text style={{color:"white", width:"100%", textAlign:"center", marginTop:10}}>Accueil</Text>
       <View style={styles.sectionMonth}>
         <View style={styles.headerSectionMonth}>
@@ -162,12 +171,21 @@ const StatScreen: React.FC<Props> = () => {
 
 
       <FlatList
-      style={{marginHorizontal:20,marginBottom:20,marginRight:10}}
+      
       data={categories}
       horizontal
-      renderItem ={({item})=>(
-      <Item id={item.id} icon={item.icon} name={item.name} color={item.color} />
-    )}
+      showsHorizontalScrollIndicator={false}
+      renderItem={({ item }) => {
+       
+				return <TouchableOpacity>
+       
+				
+					<Item id={item.id} icon={item.icon} name={item.name} color={item.color} />
+				</TouchableOpacity>
+
+        
+			}}
+      
       /> 
 
      
@@ -259,4 +277,6 @@ const styles = StyleSheet.create({
       marginHorizontal:8,
       fontSize:16,
     },
+
+    
   });

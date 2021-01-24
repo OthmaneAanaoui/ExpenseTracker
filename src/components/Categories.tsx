@@ -1,64 +1,110 @@
 
 import * as React from 'react';
 
-import { Text, View, StyleSheet,SafeAreaView,FlatList } from 'react-native';
+import { Text, View, StyleSheet,TouchableOpacity,FlatList,Dimensions } from 'react-native';
 
-
-import { Category } from '../types/Category';
+import { useEffect, useState } from 'react';
+import { Category ,Icon, categories} from '../types/Category';
+import { Expense} from '../types/Expense';
+import { ExpenseContext, useExpense } from '../context/ExpenseContext';
 
 interface Categoriesprops {
   category:Category;
 }
+interface ExpenseCardProps {
+  expense:Expense;
+}
+
+const testExpense:Expense[] = [{
+  id:"11",
+  name: "Mes premières courses",
+  idCategory: "1",
+  date: Date.now(),
+  value: 124.57,
+  idCard: "123",
+  isIncome: false
+},
+{
+  id:"987",
+  name: "Course de la semaine",
+  idCategory: "2",
+  date: Date.now(),
+  value: 22.99,
+  idCard: "123",
+  isIncome: false
+},
+{
+  id:"987",
+  name: "Course de la semaine",
+  idCategory: "3",
+  date: Date.now(),
+  value: 22.99,
+  idCard: "123",
+  isIncome: false
+},
+
+]
 
 
 const Categories = (props : Category) => {
   
+  const expenses = useExpense();
+  const expense = expenses?.getExpenseByCategory("1")
 
+ 
   return (
     
-      <View style={styles.container}>
-          <View style={{...styles.listItem}}>
-            <Text style={styles.item}>{props.name}</Text>
-          </View>
+      
+         
+        <View  style={[styles.item,{backgroundColor:props.color}]}>
+          
+             
+
+              <Text  style={[styles.itemIcon,{marginTop:10}]}>
+                     
+                    {props.icon.name} 
+                    
+              </Text>
+
             
-      </View>
+              <Text  style={[styles.itemTitle]}>
+                    {props.name}
+                     
+                    
+              
+              </Text>
+        </View>
+            
+     
 
   );
+
+  
 };
 
 export default Categories;
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
   container: {
-    flexDirection:'row',
-    marginTop:10,
-    paddingVertical:5,
-    overflow: 'hidden',
-    width: '95%',
-    backgroundColor: '#64666A',
-    borderRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 10,
+      flexDirection: 'row',
+      flexWrap: 'wrap'
   },
-  item:{
-
-    padding:5,
-    fontWeight: '600',
-    fontSize:16, 
-
-
+  item: {
+      width: Dimensions.get('window').width * 0.5,
+      height: 100,
+      borderWidth: 1,
+      borderColor: "lightgray",
+      alignItems: 'center',
+      justifyContent: 'center', marginLeft:10       
   },
-  listItem :{
+  itemIcon: {
+     
+      height: 100,
+      resizeMode: 'contain'
+  },
+  itemTitle: {
+    height: "100%",
     
-    
-    justifyContent:'center',
-  }
-  
-
+   
+  },
 });

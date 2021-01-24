@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
-import { Alert, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Image,Alert, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../context/AuthContext";
 //import { useStoreState } from '../hooks/hooks';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AntDesign } from "@expo/vector-icons";
 
 type Props = {};
@@ -60,91 +61,107 @@ const AuthScreen: React.FC<Props> = () => {
     };
 
     return (
-        <SafeAreaView
-            style={styles.droidSafeArea}>
-            <Text style={styles.title}>
-                Welcome in Note Application
-            </Text>
-            <View style={styles.container}>
-                <Text style={styles.label}>Email</Text>
+        <View style={styles.container}>
+        <KeyboardAwareScrollView
+            style={{ flex: 1, width: '100%' }}
+            keyboardShouldPersistTaps="always">
+        
+               
+
+               <Image
+                    style={styles.logo}
+                    source={require('../images/wallet.png')}
+                />
                 <TextInput
                     style={styles.input}
-                    value={email}
+                    placeholder='E-mail'
+                    placeholderTextColor="#aaaaaa"
                     onChangeText={setEmail}
+                    value={email}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
                 />
-                <Text style={styles.title}>Password</Text>
                 <TextInput
                     style={styles.input}
-                    value={password}
+                    placeholderTextColor="#aaaaaa"
+                    secureTextEntry
+                    placeholder='Password'
                     onChangeText={setPassword}
-                    secureTextEntry={true}
+                    value={password}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
                 />
-            </View>
-            <TouchableOpacity
-                style={styles.containerButton}
-                onPress={onPressLogin}
-            >
-                <AntDesign name="login" size={24} />
-                <Text style={styles.textButtonLogin}>LOG IN</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onPressRegister} style={styles.buttonRegister}>
-                <Text style={styles.labelRegister}>
-                    Register
-                </Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={onPressLogin}>
+                    <Text style={styles.buttonTitle}>Se connecter <AntDesign name="login" size={24} /></Text>
+                </TouchableOpacity>
+
+                <View style={styles.footerView}>
+                
+                    <Text style={styles.footerText}>Vous n'avez pas de compte? <Text onPress={onPressRegister} style={styles.footerLink}>s'inscrire</Text></Text>
+                </View>
+            </KeyboardAwareScrollView>
+        </View>
+
     );
 };
 
 export default AuthScreen;
 
 const styles = StyleSheet.create({
-    droidSafeArea: {
-        flex: 1,
-        width: "100%",
-        paddingTop: Platform.OS === "android" ? 25 : 0,
-        alignItems: "center",
-    },
     container: {
-        width: "60%",
-        justifyContent: "center",
+        flex: 1,
+        alignItems: 'center'
     },
     title: {
-        fontSize: 22,
-        marginTop: 10,
-        textAlign: "center",
+
     },
-    label: {
-        fontSize: 16,
-        paddingTop: 5,
-        textAlign: "center",
+    logo: {
+        flex: 1,
+        height: 120,
+        width: 120,
+        alignSelf: "center",
+        margin: 30
     },
     input: {
-        borderWidth: 1,
+        height: 48,
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 30,
+        marginRight: 30,
+        paddingLeft: 16
+    },
+    button: {
+        backgroundColor: 'green',
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
+        height: 48,
         borderRadius: 5,
         alignItems: "center",
+        justifyContent: 'center'
     },
-    containerButton: {
-        flexDirection: 'row',
-        marginTop:30,
-        width: 100,
-        height:40,
-        borderRadius: 20,
-        textAlign:'center',
-        justifyContent:'center',
-        alignItems:'center'
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: "bold"
     },
-    textButtonLogin:{
-        fontFamily:Platform.OS === 'web'? 'BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif' : 'Roboto',
-        fontSize:14,
-        fontWeight:'500',
-        marginLeft:10
+    footerView: {
+        flex: 1,
+        alignItems: "center",
+        marginTop: 20
     },
-    labelRegister: {
-        fontSize: 14,
-        textAlign: "center",
+    footerText: {
+        fontSize: 16,
+        color: '#2e2e2d'
     },
-    buttonRegister:{
-        marginTop:15
+    footerLink: {
+        color: "#788eec",
+        fontWeight: "bold",
+        fontSize: 16
     }
-});
+})
