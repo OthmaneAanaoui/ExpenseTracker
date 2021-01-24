@@ -7,8 +7,6 @@ import { useExpense } from '../context/ExpenseContext';
 import { useCard } from '../context/BankcardContext';
 import { useCategory } from '../context/CategoryContext';
 import NewExpenseCard from '../components/NewExpenseCard';
-import RNPickerSelect from 'react-native-picker-select';
-import { Category } from '../types/Category';
 
 enum Filter {
     date,

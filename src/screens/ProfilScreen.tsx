@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform, Button, Image } from "react-native";
 import { Input } from 'react-native-elements';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/MainRouter';
+import { MainStackParamList } from '../navigators/ProfilNavigator';
 import {useAuth} from "../context/AuthContext";
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 

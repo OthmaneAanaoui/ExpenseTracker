@@ -13,7 +13,6 @@ const HomeScreen: React.FC<Props> = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const { currentSelection } = useStoreState(state => state.currentSelectionModel)
   const [modalOperationVisible, setModalOperationVisible] = useState(false);
-
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<string>('date');
   const [show, setShow] = useState(false);
@@ -23,18 +22,21 @@ const HomeScreen: React.FC<Props> = () => {
     setModalOperationVisible(true);
   }
 
-  const onChangeDate = (event, selectedDate) => {
+  const onChangeDate = (event:any, selectedDate:any) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
     console.log(currentDate)
   };
 
+  useEffect(() => {
+    // categoryContext?.asyncGetAll()
+  }, [])
   // pour tester une Expense à virer dès que la création est finie
   const testExpense:Expense[] = [{
     id:"11",
     name: "Mes premières courses",
-    idCategory: "123456",
+    idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
     value: 124.57,
     idCard: "123",
@@ -43,7 +45,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "123456",
+    idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -52,7 +54,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "123456",
+    idCategory: "K9vfaD4ksklyHGDtyLnP",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -61,7 +63,16 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "123456",
+    idCategory: "Rhe6reWPa83W90AntxEa",
+    date: Date.now(),
+    value: 22.99,
+    idCard: "123",
+    isIncome: false
+  },
+  {
+    id:"987",
+    name: "Contrôle technique",
+    idCategory: "ZKLP5VYkXenhP1Dz9qi5",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -70,7 +81,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "123456",
+    idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -79,16 +90,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id:"987",
     name: "Course de la semaine",
-    idCategory: "123456",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id:"987",
-    name: "Course de la semaine",
-    idCategory: "123456",
+    idCategory: "j3UXCSs6SeJt8geOkAXY",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -105,16 +107,18 @@ const HomeScreen: React.FC<Props> = () => {
             <View style={[styles.barSolde, {width:100}]}></View>
           </View>
         </View>
-        <ScrollView style={styles.viewLists}>
+        {/* <ScrollView style={styles.viewLists}> */}
+        <View style={styles.viewLists}>
           <FlatList
             data={testExpense}
             renderItem={({ item }) => (
               <ExpenseCard expense={item}/>
             )}
             keyExtractor={(item, index) => item.id! + index}
-            style={styles.list}
+            contentContainerStyle={styles.list}
           />
-        </ScrollView>
+          </View>
+        {/* </ScrollView> */}
         <TouchableOpacity style={styles.buttonIncome} onPress={() => onPressAddIncome()}>
             <AntDesign name="plus" size={30} color="white" />
         </TouchableOpacity>
@@ -294,10 +298,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   viewLists:{
+    flex:1,
     width:'95%',
   },
   list:{
-    // width:'100%'
+    flexGrow:1,
     paddingBottom:60
   }
   });

@@ -1,7 +1,8 @@
 import React from "react"
 import { createContext, useContext } from "react"
 import services from "../services/index"
-import { Card } from "../types/types"
+import { Card } from "../types/Card"
+import { useAuth } from "./AuthContext"
 
 type CardContextType = {
     cards: Card[];
@@ -26,18 +27,18 @@ const defaultCardState = {
 const BankCardContext = createContext<CardContextType | null>(null)
 
 export const BankCardContextProvider: React.FC = ({ children }) => {
-
+    const auth = useAuth()
     const [cards, setCards] = React.useState<Card[]>([])
 
     const asyncCreateCard: (cardNumber: string, cardValidationCode: string, ExpirationDate: number, name: string) => Promise<Card> = async (cardNumber, cardValidationCode, ExpirationDate, name) => {
-        const card = await services.bankcardService.addCard(cardNumber, cardValidationCode, ExpirationDate, name)
+        const card = await services.bankcardService.addCard(auth.user!.uid, cardNumber, cardValidationCode, ExpirationDate, name)
         setCards([ ...cards, card ])
         return card
     }
 
     const asyncGetAll: () => Promise<Card[]> = async () => {
         try{
-            const listCard: Card[] = await services.bankcardService.getCards()
+            const listCard: Card[] = await services.bankcardService.getCards(auth.user!.uid)
             setCards(listCard)
         } catch (err) {
             throw err
@@ -47,7 +48,7 @@ export const BankCardContextProvider: React.FC = ({ children }) => {
 
     const asyncUpdateCard: (card:Card) => Promise<void> = async (card) => {
         try {
-            const updateCard: Card = await services.bankcardService.updateCard(card)
+            const updateCard: Card = await services.bankcardService.updateCard(auth.user!.uid, card)
             const index = cards.findIndex(card => card.id === updateCard.id)
             cards[index] = updateCard
         } catch (err) {
@@ -57,7 +58,7 @@ export const BankCardContextProvider: React.FC = ({ children }) => {
 
     const asyncDeleteCard: (id:string) => Promise<void> = async (id) => {
         try{
-            await services.bankcardService.deleteCard(id)
+            await services.bankcardService.deleteCard(auth.user!.uid, id)
             const index = cards.findIndex(card => card.id === id)
             setCards(cards.splice(index, 1))
         } catch (err) {

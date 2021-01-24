@@ -1,20 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
-import { useContext, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Modal, TouchableHighlight } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { useCategory } from '../context/CategoryContext';
-import { ExpenseContext, useExpense } from '../context/ExpenseContext';
+import { useExpense } from '../context/ExpenseContext';
+import { getFormatDate } from '../model/Date';
+import { Category } from '../types/Category';
 import { Expense } from '../types/Expense';
-import { MaterialIcons } from '@expo/vector-icons'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-
+import IconComponent from './IconComponent';
 interface ExpenseCardProps {
   expense:Expense;
 }
 
 const ExpenseCard = (props: ExpenseCardProps) => {
   const categories = useCategory();
-  const category = categories?.getCategoryById(props.expense?.idCategory)
+  const [category, setCategory] = useState<Category>()
   const [editMode, setEditMode] = useState<boolean>(false);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const expenseContext = useExpense()
@@ -26,6 +26,11 @@ const ExpenseCard = (props: ExpenseCardProps) => {
     setModalDeleteVisible(!modalDeleteVisible)
   }
 
+  useEffect(() => {
+    const category = categories?.getCategoryById(props.expense?.idCategory)
+    setCategory(category)
+  },[])
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -36,13 +41,12 @@ const ExpenseCard = (props: ExpenseCardProps) => {
       />
       <TouchableOpacity onPress={() => setEditMode(!editMode)}>
         <View style={styles.ExpenseView}>
-          {/* <View style={[styles.categoryView,{backgroundColor:category?.color}]}> */}
-          <View style={[styles.categoryView,{backgroundColor:'blue'}]}>
-            
+          <View style={[styles.categoryView,{backgroundColor:category?.color}]}>
+            <IconComponent idIcon={category?.idIcon}/>
           </View>
           <View style={styles.information}>
             <View style={styles.topLine}>
-              <Text style={styles.date}>{props.expense?.date}</Text>
+              <Text style={styles.date}>{getFormatDate(props.expense?.date)}</Text>
             </View>
             <View style={styles.bottomLine}>
               <Text numberOfLines={editMode ? 4:1} style={styles.description}>{props.expense?.name}</Text>
@@ -56,10 +60,12 @@ const ExpenseCard = (props: ExpenseCardProps) => {
       {editMode? 
         <View style={styles.editButtonView}>
           <TouchableOpacity onPress={() => console.log("edit")} style={{marginRight:5}}>
-            <MaterialIcons name="edit" size={24} color="#14B17E" />
+            {/* <MaterialIcons name="edit" size={24} color="#14B17E" /> */}
+            <IconComponent import={'MaterialIcons'} iconName="edit" size={24} color="#14B17E"/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setModalDeleteVisible(true)}>
-            <MaterialCommunityIcons name="trash-can-outline" size={24} color="#E54200" />
+            {/* <MaterialCommunityIcons name="trash-can-outline" size={24} color="#E54200" /> */}
+            <IconComponent import={'MaterialCommunityIcons'} iconName="trash-can-outline" size={24} color="#E54200"/>
           </TouchableOpacity>
         </View>
       :
@@ -134,6 +140,8 @@ const styles = StyleSheet.create({
     marginVertical:'auto',
     marginLeft:5,
     marginRight:10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   information:{
     flex:1
