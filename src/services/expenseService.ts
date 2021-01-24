@@ -64,10 +64,11 @@ export const getExpenseByCategory: (idCategory: string) => Promise<Expense[]> = 
   return newExpenses
 }
 
-export const getExpenseByDate: (startDate: Date, endDate: Date) => Promise<Expense[]> = async (startDate, endDate) => {
+export const getExpenseByDate: (year:number, month: number) => Promise<Expense[]> = async (year, month) => {
   let newExpenses = getExpenses().then(expenses => {
     return expenses.filter(item => {
-      item.date>=startDate.valueOf() && item.date<=endDate.valueOf()
+      const date: Date = new Date(item.date);
+      return date.getFullYear() == year && date.getMonth() == month;
     })
   })
   return newExpenses;

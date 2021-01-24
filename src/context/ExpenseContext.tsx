@@ -14,7 +14,7 @@ type ExpenseContextType = {
     getExpenseById: (id:string) => Expense;
     getExpenseByCard: (idCard: string) => Promise<Expense[]>;
     getExpenseByCategory: (idCategory: string) => Promise<Expense[]>;
-    getExpenseByDate: (startDate: Date, endDate: Date) => Promise<Expense[]>;
+    getExpenseByDate: (year:number, month: number) => Promise<Expense[]>;
     getExpenses: () => Expense[];
 }
 
@@ -100,8 +100,8 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
         return newExpenses
     }
 
-    const getExpenseByDate = async (startDate: Date, endDate: Date) => {
-        const newExpenses = await services.expenseService.getExpenseByDate(startDate, endDate);
+    const getExpenseByDate = async (year:number, month: number) => {
+        const newExpenses = await services.expenseService.getExpenseByDate(year, month);
         newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses;
     }

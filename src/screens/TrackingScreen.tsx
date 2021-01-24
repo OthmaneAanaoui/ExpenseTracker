@@ -7,6 +7,8 @@ import { useExpense } from '../context/ExpenseContext';
 import { useCard } from '../context/BankcardContext';
 import { useCategory } from '../context/CategoryContext';
 import NewExpenseCard from '../components/NewExpenseCard';
+import RNPickerSelect from 'react-native-picker-select';
+import { Category } from '../types/Category';
 
 enum Filter {
     date,
@@ -66,6 +68,11 @@ const testFilter:TypeListFilter[] = [
         numberRef:"1",
         sublist:testExpense
     }]
+
+type Item = {
+    label: string,
+    value: any
+}
 
 const TrackingScreen = (props: TrackingScreenProps) => {
 
@@ -130,8 +137,21 @@ const TrackingScreen = (props: TrackingScreenProps) => {
         setListFilter(list);
     }
 
-    const loadListFilterMonth = () => {
-        // TODO
+    const loadListFilterMonth = async () => {
+        const list: TypeListFilter[] = [];
+        const currentDate: Date = new Date();
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+        for (var i = 0; i < 6; i++){
+            let l = await expense?.getExpenseByDate(year, month);
+            if (l != undefined) {
+                list.push({
+                    title: getMonthById(month),
+                    numberRef: month.toString(),
+                    sublist: l
+                })
+            }
+        }
 
     }
 
@@ -177,61 +197,12 @@ const TrackingScreen = (props: TrackingScreenProps) => {
         }
     }
 
-    const onChangePickerFilterMonth = (filter: number) => {
-
-        
-        // TODO
-        
-        const currentDate = new Date();
-        const year = (filter <= currentDate.getMonth()? currentDate.getFullYear(): currentDate.getFullYear() - 1)
-        const startDate = new Date(year, filter, 1);
-        const endDate = new Date(year, filter, 31);
-        const ext = expense?.getExpenseByDate(startDate, endDate);
-        
-    }
-
-    const loadPickerMonth = () => {
-
-        const currentDate: Date = new Date();
-        let y = currentDate.getMonth();
-        var tab = [<Picker.Item label="all month" value={ALL}/>];
-        for (var i = 0; i < 6; i++) {
-            tab.push(<Picker.Item label={getMonthById(y)} value={y} />)
-            if (y == 0) y = 11;
-            else y--;
-        }
-        console.log(tab)
-        return tab;
-    }
-
-    const onChangePickerFilterCategory = (filter: string) => {
-        // TODO
-
-    }
-
-    const loadPickerCategory = () => {
-        // TODO
-        var tab = [<Picker.Item label="All Category" value="all"/>]
-        return tab;
-    }
-
-    const onChangePickerFilterCard = (filter: string) => {
-        // TODO
-    }
-
-    const loadPickerCard = () => {
-        // TODO
-        return (<View></View>)
-    }
-
     return (
         <SafeAreaView style={styles.droidSafeArea}>
             <View style={styles.container}>
-                <Text>TrackingScreen</Text>
-            
                 <View style={styles.containerPicker}>
                     <View style={styles.pickerFilter}>
-                        <Picker 
+                        <Picker
                             selectedValue={filterPicker}
                             style={styles.selectPicker}
                             onValueChange={(itemValue, itemIndex) => onChangePickerFilter(itemValue)}
@@ -242,68 +213,13 @@ const TrackingScreen = (props: TrackingScreenProps) => {
                             <Picker.Item label="By card" value={Filter.card} />
                         </Picker>
                     </View>
-                    {/*
-                    {
-                        filterPicker == Filter.month
-                        ?
-                            <View style={styles.pickerFilter}>
-                                <Text>filter month</Text>
-                                <Picker 
-                                    selectedValue={pickerMonth}
-                                    style={styles.selectPicker}
-                                    onValueChange={(itemValue, itemIndex) => onChangePickerFilterMonth(itemValue)}
-                                >
-                                    {loadPickerMonth}
-                                </Picker>
-                            </View>
-                            :
-                            <Text></Text>
-                    }
-                */}
-                    {/*
-                    {
-                        filterPicker == Filter.category
-                        ?
-                            <View style={styles.pickerFilter}>
-                                <Text>filter category</Text>
-                                <Picker 
-                                    selectedValue={pickerCategory}
-                                    style={styles.selectPicker}
-                                    onValueChange={(itemValue, itemIndex) => onChangePickerFilterCategory(itemValue)}
-                                >
-                                    {loadPickerCategory}
-                                </Picker>
-                            </View>
-                            :
-                            <Text></Text>
-                    }*/}
-                    {/*
-                    {
-                        filterPicker == Filter.card
-                        ?
-                            <View style={styles.pickerFilter}>
-                                <Text>filter card</Text>
-                                <Picker 
-                                    selectedValue={pickerCard}
-                                    style={styles.selectPicker}
-                                    onValueChange={(itemValue, itemIndex) => onChangePickerFilterCard(itemValue)}
-                                >
-                                    {loadPickerCard}
-                                </Picker>
-                            </View>
-                            :
-                            <Text></Text>
-                    }
-                */}
-
                 </View>
-
                 <View style={styles.list}>
                     <FlatList
                         data={listFilter}
                         renderItem={({ item }) => (
                             <View style={styles.listBloc}>
-                                <Text style={{color:"white"}}>{item.title}</Text>
+                                <Text style={styles.listTitle}>{item.title}</Text>
                                 <FlatList
                                     data={item.sublist}
                                     renderItem={({ item }) => (
@@ -312,28 +228,10 @@ const TrackingScreen = (props: TrackingScreenProps) => {
                                     keyExtractor={item => item.id}
                                 />
                             </View>
-                            )}
+                        )}
                         keyExtractor={item => item.title + item.numberRef}
                     />
-                    
                 </View>
-            
-                {/*
-            <Button title={"view modal"} onPress={() => setModalVisible(true)} />
-
-            <NewExpenseCard
-                visible={state}
-                closeDisplay={() => setModalVisible(false)}
-                isNew={true}
-                idExpense={""}
-                idCategory={""}
-                idCard={""}
-                isIncome={true}
-                name={""}
-                date={0}
-                value={0}
-                />
-            */}
             </View>
         </SafeAreaView>
         
@@ -349,8 +247,7 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === "android" ? 25 : 0,
         backgroundColor:"#212227"
     },
-    container: {
-    },
+    container: {},
     containerPicker: {},
     selectPicker: {
         flexDirection: "column"
@@ -359,11 +256,12 @@ const styles = StyleSheet.create({
         height: 50,
         width: 150
     },
-    list: {
-        
-        
-    },
+    list: {},
     listBloc:{
         marginTop: 10
+    },
+    listTitle: {
+        color: "white",
+        fontSize: 16
     }
 });
