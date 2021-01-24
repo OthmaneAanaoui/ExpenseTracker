@@ -140,8 +140,8 @@ const TrackingScreen = (props: TrackingScreenProps) => {
     const loadListFilterMonth = async () => {
         const list: TypeListFilter[] = [];
         const currentDate: Date = new Date();
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear();
+        var month = currentDate.getMonth();
+        var year = currentDate.getFullYear();
         for (var i = 0; i < 6; i++){
             let l = await expense?.getExpenseByDate(year, month);
             if (l != undefined) {
@@ -150,6 +150,12 @@ const TrackingScreen = (props: TrackingScreenProps) => {
                     numberRef: month.toString(),
                     sublist: l
                 })
+            }
+            if (month == 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
             }
         }
 
