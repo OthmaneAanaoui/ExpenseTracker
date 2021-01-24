@@ -1,7 +1,7 @@
 import { useStoreState } from "../store/hooks";
 import React, { useEffect, useState } from "react";
 import { Platform, SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Modal, Alert, ScrollView, FlatList } from "react-native";
-import { AntDesign } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ExpenseCard from "../components/ExpenseCard";
 import { Expense } from "../types/Expense";

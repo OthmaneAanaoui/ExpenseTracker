@@ -13,8 +13,9 @@ type ExpenseContextType = {
     asyncUpdateExpense: (expense:Expense) => Promise<void>;
     asyncDeleteExpense: (id:string) => Promise<void>;
     getExpenseById: (id:string) => Expense;
-    getExpenseByCard: (idCard: string) => Expense[];
-    getExpenseByCategory: (idCategory: string) => Expense[];
+    getExpenseByCard: (idCard: string) => Promise<Expense[]>;
+    getExpenseByCategory: (idCategory: string) => Promise<Expense[]>;
+    getExpenseByDate: (year:number, month: number) => Promise<Expense[]>;
     getExpenses: () => Expense[];
 }
 
@@ -87,20 +88,22 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
         return expenses[index]
     }
 
-    const getExpenseByCard = (idCard:string) => {
-        const newExpenses: Expense[] = []
-        expenses.forEach(expense => {
-            if(expense.idCard === idCard) newExpenses.push(expense)
-        })
+    const getExpenseByCard = async (idCard:string) => {
+        const newExpenses = await services.expenseService.getExpenseByCard(idCard);
+        newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
     }
 
-    const getExpenseByCategory = (idCategory:string) => {
-        const newExpenses: Expense[] = []
-        expenses.forEach(expense => {
-            if(expense.idCategory === idCategory) newExpenses.push (expense)
-        })
+    const getExpenseByCategory = async (idCategory:string) => {
+        const newExpenses = await services.expenseService.getExpenseByCategory(idCategory);
+        newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
+    }
+
+    const getExpenseByDate = async (year:number, month: number) => {
+        const newExpenses = await services.expenseService.getExpenseByDate(year, month);
+        newExpenses.sort((a, b) => a.date - b.date);
+        return newExpenses;
     }
 
     const getExpenses = () => {
@@ -118,6 +121,7 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
                 getExpenseById,
                 getExpenseByCard,
                 getExpenseByCategory,
+                getExpenseByDate,
                 getExpenses
             }}>
             {children}
