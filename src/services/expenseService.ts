@@ -1,5 +1,5 @@
 import { queryUser } from '../types/constants';
-import { Expense } from '../types/Expense';
+import { Expense, ExpenseType } from '../types/Expense';
 
 const getQuery = (uid: string) => {
   return queryUser.doc(uid).collection('expenses')
@@ -25,7 +25,7 @@ export const getExpense: (uid: string, id: string) => Promise<Expense> = async (
 }
 
 export const addExpense: (uid: string, name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (uid, name, idCategory, value, idCard, isIncome) => {
-  const expense: Expense = {
+  const expense: ExpenseType = {
     date: new Date().getTime(),
     name: name,
     idCategory: idCategory,
@@ -62,8 +62,8 @@ export const getExpenseByCategory: (uid: string, idCategory: string) => Promise<
   return newExpenses
 }
 
-export const getExpenseByDate: (year:number, month: number) => Promise<Expense[]> = async (year, month) => {
-  let newExpenses = getExpenses().then(expenses => {
+export const getExpenseByDate: (uid: string, year:number, month: number) => Promise<Expense[]> = async (uid, year, month) => {
+  let newExpenses = getExpenses(uid).then(expenses => {
     return expenses.filter(item => {
       const date: Date = new Date(item.date);
       return date.getFullYear() == year && date.getMonth() == month;

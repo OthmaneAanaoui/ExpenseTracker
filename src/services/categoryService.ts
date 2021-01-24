@@ -1,5 +1,5 @@
 import { queryUser } from "../types/constants";
-import { Category } from "../types/Category";
+import { Category, CategoryType } from "../types/Category";
 
 const getQuery = (uid: string) => {
   return queryUser.doc(uid).collection('category')
@@ -26,7 +26,7 @@ export const getCategory: (uid:string, id: string) => Promise<Category> = async 
 
 
 export const addCategory: (uid:string, idIcon: string, name: string, color:string) => Promise<Category> = async (uid, idIcon, name, color) => {
-  const category: Category = {
+  const category: CategoryType = {
     name: name,
     idIcon: idIcon,
     color: color,
@@ -37,7 +37,7 @@ export const addCategory: (uid:string, idIcon: string, name: string, color:strin
 };
 
 export const addCategoryWithUserId: (uid:string, idIcon: string, name: string, color:string) => Promise<Category> = async (uid, idIcon, name, color) => {
-  const category: Category = {
+  const category: CategoryType = {
     name: name,
     idIcon: idIcon,
     color: color,
