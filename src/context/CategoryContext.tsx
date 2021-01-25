@@ -52,7 +52,7 @@ export const CategoryContextProvider: React.FC = ({ children }) => {
         try {
             const updateCategory: Category = await services.categoryService.updateCategory(auth.user!.uid, category)
             const index = categories.findIndex(category => updateCategory.id === category.id)
-            categories[index] = updateCategory
+            categories[index] = {...updateCategory}
         } catch (err) {
             throw err
         }
@@ -60,9 +60,9 @@ export const CategoryContextProvider: React.FC = ({ children }) => {
 
     const asyncDeleteCategory = async (id:string) => {
         try {
-            await services.categoryService.deleteCategory(auth.user!.uid, id)
             const index = categories.findIndex(category => category.id === id)
-            setCategories(categories.splice(index,1))
+            categories.splice(index,1)
+            await services.categoryService.deleteCategory(auth.user!.uid, id)
         } catch (err) {
             throw err
         }
