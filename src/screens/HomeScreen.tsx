@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ExpenseCard from "../components/ExpenseCard";
 import { Expense } from "../types/Expense";
+import NewExpenseCard from "../components/NewExpenseCard";
 type Props = {};
 
 
@@ -22,7 +23,7 @@ const HomeScreen: React.FC<Props> = () => {
     setModalOperationVisible(true);
   }
 
-  const onChangeDate = (event:any, selectedDate:any) => {
+  const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
@@ -33,8 +34,8 @@ const HomeScreen: React.FC<Props> = () => {
     // categoryContext?.asyncGetAll()
   }, [])
   // pour tester une Expense à virer dès que la création est finie
-  const testExpense:Expense[] = [{
-    id:"11",
+  const testExpense: Expense[] = [{
+    id: "11",
     name: "Mes premières courses",
     idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
@@ -43,7 +44,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Course de la semaine",
     idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
@@ -52,7 +53,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Course de la semaine",
     idCategory: "K9vfaD4ksklyHGDtyLnP",
     date: Date.now(),
@@ -61,7 +62,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Course de la semaine",
     idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
@@ -70,7 +71,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Contrôle technique",
     idCategory: "ZKLP5VYkXenhP1Dz9qi5",
     date: Date.now(),
@@ -79,7 +80,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Course de la semaine",
     idCategory: "Rhe6reWPa83W90AntxEa",
     date: Date.now(),
@@ -88,7 +89,7 @@ const HomeScreen: React.FC<Props> = () => {
     isIncome: false
   },
   {
-    id:"987",
+    id: "987",
     name: "Course de la semaine",
     idCategory: "j3UXCSs6SeJt8geOkAXY",
     date: Date.now(),
@@ -96,34 +97,50 @@ const HomeScreen: React.FC<Props> = () => {
     idCard: "123",
     isIncome: false
   }
-]
+  ]
 
-    return (
-      <SafeAreaView style={styles.droidSafeArea}>
-          <Text style={styles.titlePage}>Solde</Text>
-        <View style={styles.sectionSolde}>
-          <Text style={styles.textSolde}>1236.59 €</Text>
-          <View style={styles.viewSolde}>
-            <View style={[styles.barSolde, {width:100}]}></View>
-          </View>
+  const closeNextExpenseModal = () => {
+    console.log("close expense modal")
+  }
+
+  return (
+    <SafeAreaView style={styles.droidSafeArea}>
+      <Text style={styles.titlePage}>Solde</Text>
+      <View style={styles.sectionSolde}>
+        <Text style={styles.textSolde}>1236.59 €</Text>
+        <View style={styles.viewSolde}>
+          <View style={[styles.barSolde, { width: 100 }]}></View>
         </View>
-        {/* <ScrollView style={styles.viewLists}> */}
-        <View style={styles.viewLists}>
-          <FlatList
-            data={testExpense}
-            renderItem={({ item }) => (
-              <ExpenseCard expense={item}/>
-            )}
-            keyExtractor={(item, index) => item.id! + index}
-            contentContainerStyle={styles.list}
-          />
-          </View>
-        {/* </ScrollView> */}
-        <TouchableOpacity style={styles.buttonIncome} onPress={() => onPressAddIncome()}>
-            <AntDesign name="plus" size={30} color="white" />
-        </TouchableOpacity>
-        {/* <View style={styles.centeredView}> */}
-          {/* <View style={styles.modalView}>
+      </View>
+      {/* <ScrollView style={styles.viewLists}> */}
+      <View style={styles.viewLists}>
+        <FlatList
+          data={testExpense}
+          renderItem={({ item }) => (
+            <ExpenseCard expense={item} />
+          )}
+          keyExtractor={(item, index) => item.id! + index}
+          contentContainerStyle={styles.list}
+        />
+      </View>
+      <NewExpenseCard 
+          visible={true}
+          isNew={true}
+          idExpense={""}
+          idCategory={"0"}
+          idCard={"0"}
+          isIncome={false}
+          name={""}
+          value={0}
+          date={Date.now()}
+          closeDisplay={() => closeNextExpenseModal()}
+      />
+      {/* </ScrollView> */}
+      <TouchableOpacity style={styles.buttonIncome} onPress={() => onPressAddIncome()}>
+        <AntDesign name="plus" size={30} color="white" />
+      </TouchableOpacity>
+      {/* <View style={styles.centeredView}> */}
+      {/* <View style={styles.modalView}>
             <Text style={styles.modalText}>Add operation</Text>
             <DateTimePicker
               testID="dateTimePicker"
@@ -140,9 +157,9 @@ const HomeScreen: React.FC<Props> = () => {
               <Text style={styles.textStyle}>Hide Modal</Text>
             </TouchableHighlight>
           </View> */}
-        {/* </View> */}
-{/* fenetre modale afficher pour entrer une nouvelle opération */}
-    {/* <View style={styles.centeredView}>
+      {/* </View> */}
+      {/* fenetre modale afficher pour entrer une nouvelle opération */}
+      {/* <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -165,35 +182,35 @@ const HomeScreen: React.FC<Props> = () => {
         </View>
       </Modal>
     </View> */}
-      </SafeAreaView>
-    );
+    </SafeAreaView>
+  );
 
 };
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  droidSafeArea:{
+  droidSafeArea: {
     flex: 1,
     alignItems: "center",
     width: "100%",
     paddingTop: Platform.OS === "android" ? 25 : 0,
-    backgroundColor:"#212227"
+    backgroundColor: "#212227"
   },
-  titlePage:{
-    color:"white",
-    textAlign: "center", 
-    marginTop:5,
-    fontWeight:"500",
-    fontSize:18
+  titlePage: {
+    color: "white",
+    textAlign: "center",
+    marginTop: 5,
+    fontWeight: "500",
+    fontSize: 18
   },
-  sectionSolde:{
-    backgroundColor:"#2A2D34",
-    width:"80%",
-    marginTop:10,
+  sectionSolde: {
+    backgroundColor: "#2A2D34",
+    width: "80%",
+    marginTop: 10,
     paddingBottom: 15,
     alignItems: "center",
-    borderRadius:20,
+    borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -203,55 +220,55 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  textSolde:{
+  textSolde: {
     color: "white",
-    fontSize:24,
-    fontWeight:"500",
+    fontSize: 24,
+    fontWeight: "500",
     textAlign: "center",
-    marginTop:7,
+    marginTop: 7,
   },
-  viewSolde:{
+  viewSolde: {
     flexDirection: "row",
-    marginTop:15,
-    marginHorizontal:"auto",
-    borderRadius:3,
-    height:30,
-    width:"80%",
-    backgroundColor:"red"
+    marginTop: 15,
+    marginHorizontal: "auto",
+    borderRadius: 3,
+    height: 30,
+    width: "80%",
+    backgroundColor: "red"
   },
-  barSolde:{
-    backgroundColor:"#14B17E",
-    borderTopLeftRadius:3,
-    borderBottomLeftRadius:3,
+  barSolde: {
+    backgroundColor: "#14B17E",
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
   },
-  buttonIncome:{
+  buttonIncome: {
     position: "absolute",
-    backgroundColor:"green",
-    width:40,
-    height:40,
-    bottom:10,
-    right:10,
-    borderRadius:20,
-    marginHorizontal:10,
+    backgroundColor: "green",
+    width: 40,
+    height: 40,
+    bottom: 10,
+    right: 10,
+    borderRadius: 20,
+    marginHorizontal: 10,
     justifyContent: "center",
     alignItems: "center",
-    elevation:100,
+    elevation: 100,
   },
-  buttonExpense:{
+  buttonExpense: {
     // flexBasis:"40%"
-    backgroundColor:"orange",
-    width:50,
-    height:50,
-    borderRadius:25,
+    backgroundColor: "orange",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center"
   },
-  buttonFilter:{
-    marginRight:10,
-    width:50,
-    height:50,
-    backgroundColor:"black",
-    borderRadius:25,
+  buttonFilter: {
+    marginRight: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: "black",
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -265,10 +282,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     position: "absolute",
-    flex:1,
+    flex: 1,
     margin: 20,
-    width:"95%",
-    height:400,
+    width: "95%",
+    height: 400,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -297,12 +314,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-  viewLists:{
-    flex:1,
-    width:'95%',
+  viewLists: {
+    flex: 1,
+    width: '95%',
   },
-  list:{
-    flexGrow:1,
-    paddingBottom:60
+  list: {
+    flexGrow: 1,
+    paddingBottom: 60
   }
-  });
+});

@@ -89,19 +89,19 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
     }
 
     const getExpenseByCard = async (idCard:string) => {
-        const newExpenses = await services.expenseService.getExpenseByCard(idCard);
+        const newExpenses = await services.expenseService.getExpenseByCard(auth.user!.uid, idCard);
         newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
     }
 
     const getExpenseByCategory = async (idCategory:string) => {
-        const newExpenses = await services.expenseService.getExpenseByCategory(idCategory);
+        const newExpenses = await services.expenseService.getExpenseByCategory(auth.user!.uid, idCategory);
         newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses
     }
 
     const getExpenseByDate = async (year:number, month: number) => {
-        const newExpenses = await services.expenseService.getExpenseByDate(year, month);
+        const newExpenses = await services.expenseService.getExpenseByDate(auth.user!.uid, year, month);
         newExpenses.sort((a, b) => a.date - b.date);
         return newExpenses;
     }
