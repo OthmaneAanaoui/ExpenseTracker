@@ -1,21 +1,21 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import {Modal, Text, View, StyleSheet, Button, Platform, SafeAreaView, Picker, FlatList} from 'react-native';
-import {useState} from "react";
 import { Expense } from '../types/Expense';
 import ExpenseCard from "../components/ExpenseCard";
 import { useExpense } from '../context/ExpenseContext';
 import { useCard } from '../context/BankcardContext';
 import { useCategory } from '../context/CategoryContext';
-import NewExpenseCard from '../components/NewExpenseCard';
 
 enum Filter {
-    date,
-    month,
-    category,
-    card
+    date = 0,
+    month = 1,
+    category = 2,
+    card = 3
 }
 
-interface TrackingScreenProps { }
+type Props = {
+    choiceFilter: Filter
+};
 
 const testExpense:Expense[] = [{
     id:"11",
@@ -72,7 +72,7 @@ type Item = {
     value: any
 }
 
-const TrackingScreen = (props: TrackingScreenProps) => {
+const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
     const expense = useExpense();
     const card = useCard();
@@ -86,7 +86,7 @@ const TrackingScreen = (props: TrackingScreenProps) => {
     const [listFilter, setListFilter] = useState<TypeListFilter[]>([])
 
     useEffect(() => {
-        loadListFilter();
+        onChangePickerFilter(choiceFilter);
     }, [])
 
     const setModalVisible = (visible:boolean) => {

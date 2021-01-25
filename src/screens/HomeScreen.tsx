@@ -6,6 +6,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import ExpenseCard from "../components/ExpenseCard";
 import { Expense } from "../types/Expense";
 import NewExpenseCard from "../components/NewExpenseCard";
+import ExpenseEditModal from "../components/ExpenseEditModal";
+import DeleteModal from "../components/DeleteModal";
 type Props = {};
 
 
@@ -13,14 +15,14 @@ const HomeScreen: React.FC<Props> = () => {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const { currentSelection } = useStoreState(state => state.currentSelectionModel)
-  const [modalOperationVisible, setModalOperationVisible] = useState(false);
+  const [modalExpenseEdit, setModalExpenseEdit] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<string>('date');
   const [show, setShow] = useState(false);
 
   const onPressAddIncome = () => {
     console.log("add income")
-    setModalOperationVisible(true);
+    setModalExpenseEdit(true);
   }
 
   const onChangeDate = (event: any, selectedDate: any) => {
@@ -37,7 +39,7 @@ const HomeScreen: React.FC<Props> = () => {
   const testExpense: Expense[] = [{
     id: "11",
     name: "Mes premières courses",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "TH3IwH7f9FqCBgU6kU4Q",
     date: Date.now(),
     value: 124.57,
     idCard: "123",
@@ -46,7 +48,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id: "987",
     name: "Course de la semaine",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "YIFsvV0ATAOoGKxSlvoq",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -55,7 +57,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id: "987",
     name: "Course de la semaine",
-    idCategory: "K9vfaD4ksklyHGDtyLnP",
+    idCategory: "iwOm7gQIPPlqsPhfBSE7",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -64,7 +66,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id: "987",
     name: "Course de la semaine",
-    idCategory: "Rhe6reWPa83W90AntxEa",
+    idCategory: "aV0uxGRfSLShKmlIdjIO",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -73,7 +75,7 @@ const HomeScreen: React.FC<Props> = () => {
   {
     id: "987",
     name: "Contrôle technique",
-    idCategory: "ZKLP5VYkXenhP1Dz9qi5",
+    idCategory: "aV0uxGRfSLShKmlIdjIO",
     date: Date.now(),
     value: 22.99,
     idCard: "123",
@@ -182,6 +184,7 @@ const HomeScreen: React.FC<Props> = () => {
         </View>
       </Modal>
     </View> */}
+      <ExpenseEditModal visible={modalExpenseEdit} onPressDelete={() => console.log("delete press")} onPressCancel={() => setModalExpenseEdit(!modalExpenseEdit)} />
     </SafeAreaView>
   );
 

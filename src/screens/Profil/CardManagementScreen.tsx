@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform} from "react-native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MainStackParamList } from '../navigators/ProfilNavigator';
+import { ProfilStackParamList } from '../../navigators/ProfilNavigator';
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'Cards'>;
+    navigation: StackNavigationProp<ProfilStackParamList ,'Cards'>;
 };
 
 const CardManagementScreen: React.FC<Props> = ({ navigation }) => {

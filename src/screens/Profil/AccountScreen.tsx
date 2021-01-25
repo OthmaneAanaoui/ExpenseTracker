@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet, Platform, Button, Alert} from "react-native";
 import { Input } from 'react-native-elements';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {useAuth} from "../context/AuthContext";
+import {useAuth} from "../../context/AuthContext";
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-import { MainStackParamList } from "../navigators/ProfilNavigator";
+import { ProfilStackParamList } from "../../navigators/ProfilNavigator";
 
 type Props = {
-    navigation: StackNavigationProp<MainStackParamList ,'Account'>;
+    navigation: StackNavigationProp<ProfilStackParamList ,'Account'>;
 };
 
 const AccountScreen: React.FC<Props> = ({ navigation }) => {

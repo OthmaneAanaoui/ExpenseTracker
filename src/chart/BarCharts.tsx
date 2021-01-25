@@ -165,12 +165,12 @@ const BarCharts = (props: BarChartsProps) => {
   const drawBarGroups = () => {
     let pos_x = graphInfo.yAxis.width
     let tags:any = [];
-    props.data?.map((bGroup:DataBar, iGroup:number) => {
+    props.data?.forEach((bGroup:DataBar, iGroup:number) => {
       const xText = xTextDraw(bGroup.title, iGroup, pos_x, bGroup.idGroupClick)
       tags = [...tags, xText]
-      bGroup.bars.map((bar, iBar) => {
+      bGroup.bars.forEach((bar, iBar) => {
         let pos_y = layoutSize?.height - graphInfo.xAxisHeight
-        bar.data.map((value:number, iValue:number) => {
+        bar.data.forEach((value:number, iValue:number) => {
           const heightBar = getProportionHeight(value, graphInfo.range, layoutSize?.height - graphInfo.xAxisHeight)
           pos_y -= heightBar
           const key = iGroup + "_" + iBar + "_" + iValue
