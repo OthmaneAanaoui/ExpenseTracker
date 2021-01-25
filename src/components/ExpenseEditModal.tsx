@@ -1,18 +1,31 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Modal, TouchableOpacity, Switch } from 'react-native';
+import { Text, View, StyleSheet, Modal, TouchableOpacity, Switch, TextInput } from 'react-native';
+import { Input } from "react-native-elements";
+import { ModalDatePicker } from "react-native-material-date-picker";
 
 interface ExpenseEditModalProps {
     visible: boolean;
     onPressDelete: Function;
     onPressCancel: Function;
     isIncome?: boolean;
+    isNew:boolean;
+    idExpense?:string;
+    idCategory?:string;
+    idCard?:string;
+    name?:string;
+    value?: number;
+    date?: number;
 }
 
 const ExpenseEditModal = (props: ExpenseEditModalProps) => {
     const [modalVisible, setModalVisible] = useState<boolean>(props.visible)
     const [isIncomes, setIncomes] = useState<boolean>(props.isIncome || false)
+    const [name, setName] = useState<string>(props.name || "")
+    const [value, setValue] = useState<number>(props.value || 0)
+    const [date, setDate] = useState<Date>(props.date != undefined?new Date(props.date):new Date())
+
 
     useEffect(() => {
         setModalVisible(props.visible)
@@ -20,6 +33,22 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
 
     const toggleSwitch = () => {
         setIncomes(!isIncomes);
+    }
+
+    const onChanged = (text: string) => {
+        let newText = '';
+        let numbers = '0123456789';
+    
+        for (var i=0; i < text.length; i++) {
+            if(numbers.indexOf(text[i]) > -1 ) {
+                newText = newText + text[i];
+            }
+            else {
+                // your call back function
+                alert("please enter numbers only");
+            }
+        }
+        setValue(Number(newText));
     }
 
     return (
@@ -31,7 +60,8 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
                 onRequestClose={() => {
                     // setModalVisible(!modalVisible)
                     props.onPressCancel();
-                }}>
+                }}
+            >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <LinearGradient
@@ -40,20 +70,45 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
                             end={{x:0.5,y:0.5}}
                             style={styles.backgroundlinear}
                         />
-                <View style={styles.viewSwitchIncome}>
-                    <Text style={styles.textSwitchButton}>Expense</Text>
-                    <Switch
-                        trackColor={{ false: "#363636", true: "#363636" }}
-                        thumbColor={isIncomes ? "red" : "#14B17E"}
-                        onValueChange={toggleSwitch}
-                        value={!isIncomes}
-                        style={{transform:[{ scaleX: 1.5}, { scaleY: 1.5 }], marginHorizontal:10}}
-                    />
-                    <Text style={styles.textSwitchButton}>Income</Text>
-                </View>
-                        <Text style={styles.modalText}>Please note that the deletion is irreversible.</Text>
-                        <View style={styles.modalButtonView}>
-                            <TouchableOpacity
+                        <View style={styles.dateSelect}>
+                            <ModalDatePicker
+                                button={<Text style={styles.date}>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</Text>}
+                                locale="fr"
+                                onSelect={(date:any) => setDate(date) }
+                                isHideOnSelect={true}
+                                initialDate={props.isNew?new Date():date}
+                            />
+                        </View>
+                        <View style={styles.viewSwitchIncome}>
+                            <Text style={styles.textSwitchButton}>Expense</Text>
+                            <Switch
+                                trackColor={{ false: "#363636", true: "#363636" }}
+                                thumbColor={isIncomes ? "red" : "#14B17E"}
+                                onValueChange={toggleSwitch}
+                                value={!isIncomes}
+                                style={{transform:[{ scaleX: 1.5}, { scaleY: 1.5 }], marginHorizontal:10}}
+                            />
+                            <Text style={styles.textSwitchButton}>Income</Text>
+                        </View>
+                        <View style={styles.view}>
+                            <Text style={styles.item}> Name : </Text>
+                            <Input
+                                value={name}
+                                onChangeText={value => setName(value)}
+                            />
+                        </View>
+                        <View style={styles.view}>
+                            <Text style={styles.item}> Value : </Text>
+                            <TextInput
+                                keyboardType='numeric'
+                                onChangeText={(text)=> onChanged(text)}
+                                value={value.toString()}
+                                maxLength={10}  //setting limit of input
+                            />
+                        </View>
+                    <Text style={styles.modalText}>Please note that the deletion is irreversible.</Text>
+                    <View style={styles.modalButtonView}>
+                        <TouchableOpacity
                                 style={{ ...styles.openButton, backgroundColor: '#FF2300' }}
                                 onPress={() => props.onPressDelete()}>
                                 <Text style={styles.textStyle}>Delete</Text>
@@ -145,5 +200,18 @@ const styles = StyleSheet.create({
     textSwitchButton:{
         color: 'white', 
         fontSize:18 
-    }
+    },
+    item: {
+        color:"white"
+    },
+    view: {
+        margin: 5
+    },
+    date: {
+        color: 'white',
+        fontSize: 10
+    },
+    dateSelect: {
+        flexDirection: "column"
+    },
 });

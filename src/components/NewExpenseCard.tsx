@@ -162,7 +162,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                         style={styles.selectPicker}
                         onValueChange={(itemValue, itemIndex) => setIdCategories(itemValue)}
                     >
-                        {pickerCard}
+                        {pickerCategory()}
                     </Picker>
                 </View>
 
@@ -173,7 +173,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                         style={styles.selectPicker}
                         onValueChange={(itemValue, itemIndex) => setIdCards(itemValue)}
                     >
-                        {pickerCategory()}
+                        {pickerCard()}
                     </Picker>
                 </View>
 

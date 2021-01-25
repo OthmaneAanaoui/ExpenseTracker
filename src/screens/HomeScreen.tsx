@@ -184,7 +184,7 @@ const HomeScreen: React.FC<Props> = () => {
         </View>
       </Modal>
     </View> */}
-      <ExpenseEditModal visible={modalExpenseEdit} onPressDelete={() => console.log("delete press")} onPressCancel={() => setModalExpenseEdit(!modalExpenseEdit)} />
+      <ExpenseEditModal isNew={true} visible={modalExpenseEdit} onPressDelete={() => console.log("delete press")} onPressCancel={() => setModalExpenseEdit(!modalExpenseEdit)} />
     </SafeAreaView>
   );
 
