@@ -5,6 +5,7 @@ import ExpenseCard from "../components/ExpenseCard";
 import { useExpense } from '../context/ExpenseContext';
 import { useCard } from '../context/BankcardContext';
 import { useCategory } from '../context/CategoryContext';
+import TrackingComponent from "../components/TrackingComponent";
 
 enum Filter {
     date = 0,
@@ -223,14 +224,7 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                         data={listFilter}
                         renderItem={({ item }) => (
                             <View style={styles.listBloc}>
-                                <Text style={styles.listTitle}>{item.title}</Text>
-                                <FlatList
-                                    data={item.sublist}
-                                    renderItem={({ item }) => (
-                                        <ExpenseCard expense={item} />
-                                    )}
-                                    keyExtractor={item => item.id}
-                                />
+                                <TrackingComponent title={item.title} list={item.sublist} />
                             </View>
                         )}
                         keyExtractor={item => item.title + item.numberRef}
