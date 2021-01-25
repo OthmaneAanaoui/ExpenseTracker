@@ -9,7 +9,6 @@ import { Category } from '../types/Category';
 import { Expense } from '../types/Expense';
 import IconComponent from './IconComponent';
 import DeleteModal from './DeleteModal';
-import VignetteCategory from './VignetteCategory';
 interface ExpenseCardProps {
   expense:Expense;
 }
