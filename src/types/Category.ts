@@ -1,16 +1,9 @@
 
 export type Category = {
-    id: string,
+    id?: string,
     idIcon: string,
     name: string,
     color:string
-}
-
-export type CategoryType = {
-  id?: string,
-  idIcon: string,
-  name: string,
-  color:string
 }
 
 export const initCategories = [
