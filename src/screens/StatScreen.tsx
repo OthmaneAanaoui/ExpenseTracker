@@ -5,6 +5,11 @@ import Barcharts from "../chart/BarCharts";
 import { Bars } from "../chart/BarType";
 import { SelectionTypeEnum } from "../store/model/CurrentSelection";
 import { AntDesign } from '@expo/vector-icons'; 
+import Item from '../components/Categories'
+import { Category,initCategories } from '../types/Category';
+import { FlatList } from "react-native-gesture-handler";
+import { useCategory } from "../context/CategoryContext";
+
 type Props = {};
 
 // Format de données
@@ -106,9 +111,15 @@ const data:Bars = [
 }
 ]
 
+
+
 const StatScreen: React.FC<Props> = () => {
+  
   const [isEnabled, setIsEnabled] = useState(false);
   const { currentSelection } = useStoreState(state => state.currentSelectionModel)
+  const categoryContext = useCategory()
+  
+  
 
   const onClickBarGraph = () => {
     console.log("onClickBarGraph homescreen : ",currentSelection)
@@ -129,9 +140,12 @@ const StatScreen: React.FC<Props> = () => {
   const onClickNextYear = () => {
     console.log("next year")
   }
-
+  
+  
     return (
+      
 <SafeAreaView style={styles.droidSafeArea}>
+
   <Text style={{color:"white", width:"100%", textAlign:"center", marginTop:10}}>Accueil</Text>
       <View style={styles.sectionMonth}>
         <View style={styles.headerSectionMonth}>
@@ -156,7 +170,32 @@ const StatScreen: React.FC<Props> = () => {
         </View>
         <Barcharts style={styles.barCharStyle} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
       </View>
+
+
+      <FlatList
+      
+      data={categoryContext?.getCatgories()}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      renderItem={({ item }) => {
+       
+				return <TouchableOpacity>
+       
+				
+					<Item id={item.id} idIcon={item.idIcon} name={item.name} color={item.color} />
+				</TouchableOpacity>
+
+        
+			}}
+      
+      /> 
+
+     
 </SafeAreaView>
+
+
+
+
     );
 
 };
@@ -242,4 +281,6 @@ const styles = StyleSheet.create({
       marginHorizontal:8,
       fontSize:16,
     },
+
+    
   });

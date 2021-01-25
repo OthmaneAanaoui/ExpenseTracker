@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {useContext, useEffect, useState} from 'react';
-import {Text, View, StyleSheet, Switch, Button, TextInput, Modal} from 'react-native';
+import {Text, View, StyleSheet, Switch, Button, TextInput, Modal, Picker} from 'react-native';
 import {Input} from "react-native-elements";
 import { useExpense } from "../context/ExpenseContext";
 import {useCategory} from "../context/CategoryContext";
 import { useCard } from "../context/BankcardContext";
 import { Expense } from '../types/Expense';
 import { ModalDatePicker } from "react-native-material-date-picker";
-import { Picker } from '@react-native-picker/picker';
-import { AntDesign } from '@expo/vector-icons'; 
 
 type props = {
     visible: boolean;
@@ -81,22 +79,18 @@ const NewExpenseCard: React.FC<props> = (props) => {
     }
 
     const pickerCategory = () => {
-        console.log("picker catégorie")
         var tab = [<Picker.Item label="Choose a Category" value={"0"} />];
         var tabCategory = cat?.getCatgories();
-        console.log("nombre de catégorie", tabCategory?.length)
         tabCategory?.forEach((category) => {
             tab.push(
-                <Picker.Item label={category.name} value={category.id} >
-                    <AntDesign name="forward" size={24} color="black" />
-                    </Picker.Item>
+                <Picker.Item label={category.name} value={category.id} />
             )
         })
         return tab;
     }
 
     const pickerCard = () => {
-        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];
+        var tab = [<Picker.Item label="Choose a Card" value={"0"} />];;
         var tabCard = car?.getCards();
         tabCard?.forEach((card) => {
             tab.push(
@@ -130,14 +124,13 @@ const NewExpenseCard: React.FC<props> = (props) => {
                 visible={state}
                 onRequestClose={() => props.closeDisplay()}
             >
-                <View style={{backgroundColor:'red'}}>
                 <View style={styles.eachView}>
                     <Text style={styles.date}>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</Text>
                     <View style={styles.dateSelect}>
                         <ModalDatePicker
                             button={<Text>Select Date</Text>}
                             locale="fr"
-                            onSelect={(date:any) => setDate(date) }
+                            onSelect={(date:any) => console.log(date) }
                             isHideOnSelect={true}
                             initialDate={props.isNew?new Date():date}
                         />
@@ -156,7 +149,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                 </View>
 
                 <View style={styles.eachView}>
-                    <Text style={{ color: 'white' }}> choice card </Text>
+                    <Text style={{ color: 'white' }}> choice categories </Text>
                     <Picker
                         selectedValue={idCategories}
                         style={styles.selectPicker}
@@ -167,7 +160,7 @@ const NewExpenseCard: React.FC<props> = (props) => {
                 </View>
 
                 <View style={styles.eachView}>
-                    <Text style={{color: 'white'}}> choice category </Text>
+                    <Text style={{color: 'white'}}> choice card </Text>
                     <Picker
                         selectedValue={idCards}
                         style={styles.selectPicker}
@@ -204,7 +197,6 @@ const NewExpenseCard: React.FC<props> = (props) => {
                         :
                         <Button title={"Save"} onPress={onSave}/>
                     }
-                </View>
                 </View>
             </Modal>
         </View>

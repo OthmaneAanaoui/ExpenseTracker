@@ -24,7 +24,7 @@ const defaultCategoryState = {
     getCatgories: () => undefined
 }
 
-const CategoryContext = createContext<CategoryContextType | null>(null)
+ const CategoryContext = createContext<CategoryContextType | null>(null)
 
 export const CategoryContextProvider: React.FC = ({ children }) => {
     const auth = useAuth()
