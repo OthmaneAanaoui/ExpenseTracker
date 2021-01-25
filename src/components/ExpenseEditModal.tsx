@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Modal, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { Input } from "react-native-elements";
 import { ModalDatePicker } from "react-native-material-date-picker";
+import { useExpense } from '../context/ExpenseContext';
+import { Expense } from '../types/Expense';
 
 interface ExpenseEditModalProps {
     visible: boolean;
-    onPressDelete: Function;
+    onPressSave: Function;
     onPressCancel: Function;
     isIncome?: boolean;
     isNew:boolean;
@@ -24,7 +26,11 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
     const [isIncomes, setIncomes] = useState<boolean>(props.isIncome || false)
     const [name, setName] = useState<string>(props.name || "")
     const [value, setValue] = useState<number>(props.value || 0)
-    const [date, setDate] = useState<Date>(props.date != undefined?new Date(props.date):new Date())
+    const [date, setDate] = useState<Date>(props.date != undefined ? new Date(props.date) : new Date())
+    const [idCard, setIdCard] = useState<string>(props.idCard || "")
+    const [idCategory, setIdCategory] = useState<string>(props.idCategory || "")
+
+    const exp = useExpense()
 
 
     useEffect(() => {
@@ -49,6 +55,33 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
             }
         }
         setValue(Number(newText));
+    }
+
+    const save = () => {
+        if (props.isNew) return onCreate();
+        else return onSave();
+    }
+
+    const onCreate = () => {
+        if(props.isNew == true && props.idExpense === "") exp?.asyncCreateExpense(props.name!, props.idCategory!, props.value!, props.idCard!, props.isIncome!);
+        props.onPressSave();
+    }
+
+    const onSave = () => {
+
+        if(props.isNew == false && props.idExpense != "" ) {
+            const newExpense: Expense = {
+                id:props.idExpense!,
+                name: name,
+                idCard: idCard,
+                idCategory: idCategory,
+                value: value,
+                date: date.getTime(),
+                isIncome: isIncomes
+            }
+            exp?.asyncUpdateExpense(newExpense);
+        }
+        props.onPressSave()
     }
 
     return (
@@ -110,8 +143,8 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
                     <View style={styles.modalButtonView}>
                         <TouchableOpacity
                                 style={{ ...styles.openButton, backgroundColor: '#FF2300' }}
-                                onPress={() => props.onPressDelete()}>
-                                <Text style={styles.textStyle}>Delete</Text>
+                                onPress={() => props.onPressSave()}>
+                                <Text style={styles.textStyle}>Save</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
