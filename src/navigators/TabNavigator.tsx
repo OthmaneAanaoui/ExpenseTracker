@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfilNavigator from "./ProfilNavigator";
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
+import Filter from '../screens/TrackingScreen';
 import TrackingScreen from '../screens/TrackingScreen';
 // import { useStoreState } from '../store/hooks';
 import { useStoreActions } from '../store/hooks';
@@ -36,7 +37,7 @@ const TabNavigator = () => {
 
     function Tracking() {
         return (
-            <TrackingScreen/>
+            <TrackingScreen choiceFilter={0}/>
         )
     }
 
