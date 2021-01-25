@@ -28,18 +28,18 @@ const CategoryManagementEditScreen: React.FC<Props> = ({ route, navigation }) =>
       Alert.alert("Give a name to category")
       return
     }
-    if(route.params?.category === undefined) {
+    if (route.params?.category === undefined) {
       categoryContext?.asyncCreateCategory(iconCategory!, inputName, colorCategory!)
     } else {
       const updateCategory = {
-        id:route.params?.category.id,
+        id: route.params?.category.id,
         idIcon: iconCategory!,
         name: inputName!,
-        color:colorCategory!
+        color: colorCategory!
       }
       await categoryContext?.asyncUpdateCategory(updateCategory)
     }
-    navigation.navigate("Categories", {event:Math.random()})
+    navigation.navigate("Categories", { event: Math.random() })
   }
 
   return (
@@ -57,13 +57,26 @@ const CategoryManagementEditScreen: React.FC<Props> = ({ route, navigation }) =>
           />
         </View>
         <View style={styles.viewButtonColorIcon}>
-          <TouchableOpacity style={[styles.buttonStyle, { backgroundColor: '#e30094' }]} onPress={() => setColorEdit(true)} disabled={colorEdit}>
-            <Text style={styles.textButtonStyle}>Color</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.buttonStyle, { backgroundColor: '#00ba60' }]} onPress={() => setColorEdit(false)} disabled={!colorEdit}>
-            <Text style={styles.textButtonStyle}>Icon</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity style={[styles.buttonStyle, { backgroundColor: '#e30094' }]} onPress={() => setColorEdit(true)} disabled={colorEdit}>
+              <Text style={styles.textButtonStyle}>Color</Text>
+            </TouchableOpacity>
+            {colorEdit ?
+              <View style={{ width: 80, height: 10, backgroundColor: '#e30094', top: -20, left: 10 }}></View>
+              : <></>
+            }
+          </View>
+          <View>
+            <TouchableOpacity style={[styles.buttonStyle, { backgroundColor: '#00ba60' }]} onPress={() => setColorEdit(false)} disabled={!colorEdit}>
+              <Text style={styles.textButtonStyle}>Icon</Text>
+            </TouchableOpacity>
+            {!colorEdit ?
+              <View style={{ width: 80, height: 10, backgroundColor: '#00ba60', top: -20, left: 10 }}></View>
+              : <></>
+            }
+          </View>
         </View>
+        <View style={[styles.panelLine, colorEdit ? { backgroundColor: '#e30094' } : { backgroundColor: '#00ba60' }]}></View>
       </View>
       {colorEdit ?
         <TriangleColorPicker
@@ -87,7 +100,6 @@ const CategoryManagementEditScreen: React.FC<Props> = ({ route, navigation }) =>
               </View>
             )}
             keyExtractor={(item, index) => item.id! + index}
-            contentContainerStyle={styles.flatListIcon}
             numColumns={4}
 
           />
@@ -174,23 +186,16 @@ const styles = StyleSheet.create({
     width: "60%",
     flex: 1,
     marginLeft: "20%",
-    marginTop: '5%',
     marginBottom: 110
   },
   viewListIcon: {
     flex: 1,
     width: '90%',
-    marginTop: 10,
     marginBottom: 85,
     marginLeft: '5%',
     backgroundColor: '#2A2D34',
     borderRadius: 10,
     overflow: 'hidden',
-  },
-  flatListIcon: {
-    // backgroundColor:'red',
-    // paddingHorizontal:10,
-    // paddingVertical:5,
   },
   cellIconList: {
     width: '24.5%',
@@ -204,5 +209,12 @@ const styles = StyleSheet.create({
   iconsButtonInList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  panelLine: {
+    backgroundColor: 'red',
+    width: '100%',
+    height: 5,
+    top: -22,
+    elevation: 2
   }
 });
