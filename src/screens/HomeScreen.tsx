@@ -22,7 +22,15 @@ const HomeScreen: React.FC<Props> = () => {
   const soldeStore = useStoreState(state => state.soldeStoreModel)
   const getSoldeStore = useStoreActions(actions => actions.soldeStoreModel.fetchSolde)
   const setSoldeStore = useStoreActions(actions => actions.soldeStoreModel.pushSolde)
+  const [widthBarSolde, setWidthBarSolde] = useState<number>()
+
   const auth = useAuth()
+
+  const calcWidthBarSolde = () => {
+    let percent = (soldeStore.solde.montant / 1500.00) * 100
+    if(percent > 100) percent = 100
+    return percent.toString()+'%'
+  }
 
   const onPressAddIncome = () => {
     setSelection(undefined)
@@ -65,9 +73,9 @@ const HomeScreen: React.FC<Props> = () => {
       <View style={styles.page}>
       <Text style={styles.titlePage}>Solde</Text>
       <View style={styles.sectionSolde}>
-        <Text style={styles.textSolde}>1236.59 €</Text>
+        <Text style={styles.textSolde}>{soldeStore.solde.montant.toFixed(2)} € / 1500 €</Text>
         <View style={styles.viewSolde}>
-          <View style={[styles.barSolde, { width: 100 }]}></View>
+          <View style={[styles.barSolde, { width: calcWidthBarSolde() }]}></View>
         </View>
       </View>
       <View style={styles.viewLists}>

@@ -21,7 +21,6 @@ export const updateSolde: (uid: string, solde: Solde) => Promise<Solde> = async 
     const querySnapshot = await getQuery(uid).get();
     let updateSolde:Solde
     if(querySnapshot.docs.length === 0 || solde.id === undefined){
-        console.log("update with id solde undefined")
         const doc = await getQuery(uid).add({montant:solde.montant});
         updateSolde = { id: doc.id, montant:solde.montant };
     } else {

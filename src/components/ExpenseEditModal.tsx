@@ -99,11 +99,24 @@ const ExpenseEditModal: React.FC<ExpenseEditModalProps> = (props) => {
             isIncome: isIncomes
         }
         if (props.expense === undefined) { // props.expense === undefined -> create new expense
-            await expenseContext?.asyncCreateExpense(newExpense)
-            
+            await expenseContext?.asyncCreateExpense(newExpense)            
         } else {
+            soldeStore.solde.montant = props.expense.isIncome ? soldeStore.solde.montant - props.expense.value : soldeStore.solde.montant + props.expense.value
             await expenseContext?.asyncUpdateExpense({ ...newExpense, id: props.expense.id })
         }
+        const newSolde = {
+            id:soldeStore.solde.id,
+            montant:newExpense.isIncome ? soldeStore.solde.montant + newExpense.value : soldeStore.solde.montant - newExpense.value
+        }
+        await setSoldeStore({uid:auth.user!.uid, solde:newSolde})
+
+        // const expense = expenseContext?.getExpenseById(selection?.id!)
+        // const newValueSolde = expense?.isIncome ? soldeStore.solde.montant - expense?.value : soldeStore.solde.montant + expense?.value!
+        // const newSolde = {id:soldeStore.solde.id, montant:newValueSolde}
+        // expenseContext?.asyncDeleteExpense(selection?.id!)
+        // setSoldeStore({uid:auth.user!.uid, solde:newSolde})
+
+
         props.onPressSave()
     }
 
