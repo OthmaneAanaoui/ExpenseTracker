@@ -146,7 +146,7 @@ const StatScreen: React.FC<Props> = () => {
       
 <SafeAreaView style={styles.droidSafeArea}>
 
-  <Text style={{color:"white", width:"100%", textAlign:"center", marginTop:10}}>Accueil</Text>
+  {/* <Text style={{color:"white", width:"100%", textAlign:"center", marginTop:10}}>Accueil</Text> */}
       <View style={styles.sectionMonth}>
         <View style={styles.headerSectionMonth}>
           <View style={styles.buttonNavMonth}>
@@ -172,7 +172,7 @@ const StatScreen: React.FC<Props> = () => {
       </View>
 
 
-      <FlatList
+      {/* <FlatList
       
       data={categoryContext?.getCatgories()}
       horizontal
@@ -188,7 +188,7 @@ const StatScreen: React.FC<Props> = () => {
         
 			}}
       
-      /> 
+      />  */}
 
      
 </SafeAreaView>
