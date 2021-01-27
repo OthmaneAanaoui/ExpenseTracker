@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {Modal, Text, View, StyleSheet, Button, Platform, SafeAreaView, Picker, FlatList} from 'react-native';
+import {Modal, Text, View, StyleSheet, Button, Platform, SafeAreaView, Picker, FlatList, TouchableOpacity} from 'react-native';
 import { Expense } from '../types/Expense';
-import ExpenseCard from "../components/ExpenseCard";
 import { useExpense } from '../context/ExpenseContext';
 import { useCard } from '../context/BankcardContext';
 import { useCategory } from '../context/CategoryContext';
@@ -18,35 +17,6 @@ type Props = {
     choiceFilter: Filter
 };
 
-const testExpense:Expense[] = [{
-    id:"11",
-    name: "Mes premières courses",
-    idCategory: "123456",
-    date: Date.now(),
-    value: 124.57,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id:"987",
-    name: "Course de la semaine",
-    idCategory: "123456",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id:"987",
-    name: "Course de la semaine",
-    idCategory: "123456",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  }
-]
-
 type TypeListFilter = {
     title:string;
     numberRef: string,
@@ -54,24 +24,6 @@ type TypeListFilter = {
 }
 
 const ALL = 42; /* sélectionne tous les mois */
-
-
-const testFilter:TypeListFilter[] = [
-    {
-    title:"",
-    numberRef: ALL.toString(),
-    sublist:testExpense
-    },
-    {
-        title:"",
-        numberRef:"1",
-        sublist:testExpense
-    }]
-
-type Item = {
-    label: string,
-    value: any
-}
 
 const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
@@ -81,7 +33,7 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
     const [state, setState] = useState<boolean>(false)
     const [filterPicker, setFilterPicker] = useState<Filter>(Filter.date)
-    const [pickerMonth, setPickerMonth] = useState<number>(ALL)
+    const [pickerMonth, setPickerMonth] = useState<string>(ALL.toString())
     const [pickerCategory, setPickerCategory] = useState<string>("all") // all - sinon idCategory
     const [pickerCard, setPickerCard] = useState<string>("all") // all - sinon idCard
     const [listFilter, setListFilter] = useState<TypeListFilter[]>([])
@@ -96,56 +48,65 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
     const loadListFilter = () => {
         let l = expense?.getExpenses();
-        const list: TypeListFilter[] = [{
+        const liste: TypeListFilter[] = [{
             title: "",
             numberRef: ALL.toString(),
             sublist: (l == undefined ? [] : l)
         }]
-        setListFilter(list);
+        setListFilter(liste);
     }
 
     const loadListFilterCard = () => {
+
+        console.log("loadListFilterCard")
+
         let l = card?.getCards();
-        const list: TypeListFilter[] = [];
-        l?.forEach(async (item) => {
-            const exp = await expense?.getExpenseByCard(item.id);
+        const liste: TypeListFilter[] = [];
+        l?.forEach((item) => {
+            const exp = expense?.getExpenseByCard(item.id);
             if (exp != undefined) {
-                list.push({
+                liste.push({
                     title: item.name,
                     numberRef: item.id,
                     sublist: exp
                 })
             }
         })
-        setListFilter(list);
+        setListFilter(liste);
     }
 
     const loadListFilterCategory = () => {
+
+        console.log("loadListFilterCategory")
+
         let l = category?.categories;
-        const list: TypeListFilter[] = [];
-        l?.forEach(async (item) => {
-            const exp = await expense?.getExpenseByCategory(item.id);
+        const liste: TypeListFilter[] = [];
+        l?.forEach((item) => {
+            const exp = expense?.getExpenseByCategory(item.id!);
             if (exp != undefined) {
-                list.push({
+                liste.push({
                     title: item.name,
-                    numberRef: item.id,
+                    numberRef: item.id!,
                     sublist: exp
                 })
             }
         })
-        setListFilter(list);
+        setListFilter(liste);
     }
 
-    const loadListFilterMonth = async () => {
-        const list: TypeListFilter[] = [];
+    const loadListFilterMonth = () => {
+
+        console.log("loadListFilterMonth")
+
+        const liste: TypeListFilter[] = [];
         const currentDate: Date = new Date();
         var month = currentDate.getMonth();
         var year = currentDate.getFullYear();
         for (var i = 0; i < 6; i++){
-            let l = await expense?.getExpenseByDate(year, month);
+            let l = expense?.getExpenseByDate(year, month);
             if (l != undefined) {
-                list.push({
-                    title: getMonthById(month),
+                liste.push({
+                    title: getMonthById(month) + " " + year.toString(),
                     numberRef: month.toString(),
                     sublist: l
                 })
@@ -158,14 +119,53 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
             }
         }
 
+        setListFilter(liste);
+
     }
+
+    const loadListPickerMonth = () => {
+
+        const liste = []
+        const currentDate: Date = new Date();
+        var month = currentDate.getMonth();
+        var year = currentDate.getFullYear();
+        for (var i = 0; i < 6; i++){
+            liste.push(<Picker.Item label={getMonthById(month) + " " + year.toString()} value={month + ""}/>)
+            if (month == 0) {
+                month = 11;
+                year--;
+            } else {
+                month--;
+            }
+        }
+        return liste;
+    }
+
+    const loadListPickerCategory = () => {
+        const liste = [<Picker.Item label="all" value="all"/>]
+        let l = category?.categories;
+        l?.forEach((item) => {
+            liste.push(<Picker.Item label={item.name} value={item.id}/>)
+        })
+        return liste;
+    }
+
+    const loadListPickerCard = () => {
+        const liste = [<Picker.Item label="all" value="all"/>]
+        let l = card?.cards;
+        l?.forEach((item) => {
+            liste.push(<Picker.Item label={item.name} value={item.id}/>)
+        })
+        return liste;
+    }
+
 
     const onChangePickerFilter = (filter: Filter) => {
         setFilterPicker(filter);
 
         switch (filter) {
             case Filter.month:
-                setPickerMonth(ALL);
+                setPickerMonth(ALL.toString());
                 loadListFilterMonth();
                 break;
             case Filter.category:
@@ -180,8 +180,75 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                 loadListFilter();
                 break;
         }
+    }
 
-        console.log("end onChangePickerFilter");
+    const onChangePickerCategory = (filterCategory: string) => {
+        setPickerCategory(filterCategory);
+        if (filterCategory == "all") loadListFilterCategory()
+        else {
+            let l: Expense[] = [];
+            let isNotFind: Boolean = true;
+            for (var i = 0; i < listFilter.length && isNotFind; i++){
+                if (listFilter[i].numberRef == filterCategory) {
+                    l = listFilter[i].sublist;
+                    isNotFind = false;
+                }
+            }
+            let liste: TypeListFilter[] = [
+                {
+                    title: "",
+                    numberRef: filterCategory,
+                    sublist: l
+                }
+            ];
+            setListFilter(liste);
+        }
+    }
+
+    const onChangePickerCard = (filterCard: string) => {
+        setPickerCategory(filterCard);
+        if (filterCard == "all") loadListFilterCard()
+        else {
+            let l: Expense[] = [];
+            let isNotFind: Boolean = true;
+            for (var i = 0; i < listFilter.length && isNotFind; i++){
+                if (listFilter[i].numberRef == filterCard) {
+                    l = listFilter[i].sublist;
+                    isNotFind = false;
+                }
+            }
+            let liste: TypeListFilter[] = [
+                {
+                    title: "",
+                    numberRef: filterCard,
+                    sublist: l
+                }
+            ];
+            setListFilter(liste);
+        }
+    }
+
+    const onChangePickerMonth = (filterMonth: string) => {
+        setPickerMonth(filterMonth);
+        if (filterMonth == ALL.toString()) loadListFilterMonth();
+        else {
+            let l: Expense[] = [];
+            let isNotFind: Boolean = true;
+            for (var i = 0; i < listFilter.length && isNotFind; i++){
+                if (listFilter[i].numberRef == filterMonth) {
+                    l = listFilter[i].sublist;
+                    isNotFind = false;
+                }
+            }
+            let liste: TypeListFilter[] = [
+                {
+                    title: "",
+                    numberRef: filterMonth,
+                    sublist: l
+                }
+            ];
+            setListFilter(liste);
+        }
     }
 
     const getMonthById = (numero: number) => {
@@ -202,6 +269,11 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
         }
     }
 
+    const reload = () => {
+        expense?.asyncGetAll();
+        onChangePickerFilter(filterPicker)
+    }
+
     return (
         <SafeAreaView style={styles.droidSafeArea}>
             <View style={styles.container}>
@@ -218,18 +290,59 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                             <Picker.Item label="By card" value={Filter.card} />
                         </Picker>
                     </View>
+                    {
+                        filterPicker == Filter.month ?
+                            <Picker
+                                selectedValue={pickerMonth}
+                                style={styles.selectPicker}
+                                onValueChange={(itemValue, itemIndex) => onChangePickerMonth(itemValue)}
+                            >
+                                {loadListPickerMonth()}
+                            </Picker>
+                            :
+                            <View></View>
+                    }
+                    {
+                        filterPicker == Filter.category ?
+                            <Picker
+                                selectedValue={pickerCategory}
+                                style={styles.selectPicker}
+                                onValueChange={(itemValue, itemIndex) => onChangePickerCategory(itemValue)}
+                            >
+                                {loadListPickerCategory()}
+                            </Picker>
+                            :
+                            <View></View>
+                    }
+                    {
+                        filterPicker == Filter.card ?
+                            <Picker
+                                selectedValue={pickerCard}
+                                style={styles.selectPicker}
+                                onValueChange={(itemValue, itemIndex) => onChangePickerCard(itemValue)}
+                            >
+                                <Picker.Item label="all" value="all" />
+                                {loadListPickerCard()}
+                            </Picker>
+                            :
+                            <View></View>
+                    }
+                    <View>
+                        
+                    </View>
                 </View>
                 <View style={styles.list}>
                     <FlatList
                         data={listFilter}
                         renderItem={({ item }) => (
-                            <View style={styles.listBloc}>
-                                <TrackingComponent title={item.title} list={item.sublist} />
-                            </View>
+                            item.sublist.length != 0 ?
+                                <View style={styles.listBloc}><TrackingComponent title={item.title} list={item.sublist} /></View>
+                                :
+                                <></>
                         )}
                         keyExtractor={item => item.title + item.numberRef}
                     />
-                </View>
+                </View>                
             </View>
         </SafeAreaView>
         
@@ -245,10 +358,14 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === "android" ? 25 : 0,
         backgroundColor:"#212227"
     },
-    container: {},
+    container: {
+        margin: 10,
+        height: "95%"
+    },
     containerPicker: {},
     selectPicker: {
-        flexDirection: "column"
+        flexDirection: "column",
+        color: "white"
     },
     pickerFilter: {
         height: 50,

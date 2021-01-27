@@ -48,27 +48,3 @@ export const updateExpense: (uid: string, expense:Expense) => Promise<Expense> =
 export const deleteExpense: (uid: string, id: string) => Promise<void> = async (uid, id) => {
     await getQuery(uid).doc(id).delete();
 };
-
-export const getExpenseByCard: (uid: string, idCard: string) => Promise<Expense[]> = async (uid, idCard) => {
-    let newExpenses = getExpenses(uid).then(expenses => {
-      return expenses.filter(item => {item.idCard === idCard})
-    })
-    return newExpenses
-};
-
-export const getExpenseByCategory: (uid: string, idCategory: string) => Promise<Expense[]> = async (uid, idCategory) => {
-    let newExpenses = getExpenses(uid).then(expenses => {
-      return expenses.filter(item => {item.idCategory === idCategory})
-    })
-  return newExpenses
-}
-
-export const getExpenseByDate: (uid: string, year:number, month: number) => Promise<Expense[]> = async (uid, year, month) => {
-  let newExpenses = getExpenses(uid).then(expenses => {
-    return expenses.filter(item => {
-      const date: Date = new Date(item.date);
-      return date.getFullYear() == year && date.getMonth() == month;
-    })
-  })
-  return newExpenses;
-}

@@ -11,18 +11,37 @@ interface IconComponentProps {
 }
 
 const TrackingComponent = (props: IconComponentProps) => {
+
   const [edition, setEdition] = useState<boolean>(true)
+  const [selection, setSelection] = useState<Expense | undefined>(undefined)
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [modalExpenseEdit, setModalExpenseEdit] = useState(false);
+
+  const editExpense = (item: Expense) => {
+    setSelection(item)
+    setModalExpenseEdit(true);
+  }
+
+  const openDeleteExpenseConfirm = (item: Expense) => {
+    setSelection(item)
+    setModalDeleteVisible(true)
+  }
+  
   return (
     <View>
       <TouchableOpacity
         onPress={()=>setEdition(!edition)}
       >
         {
-          edition
+          props.title != "" ?
+            (edition
             ?
             <Text style={styles.listTitle}>{props.title} ∧</Text>
             :
-            <Text style={styles.listTitle}>{props.title} ∨</Text>
+              <Text style={styles.listTitle}>{props.title} ∨</Text>
+            )
+            :
+            <Text style={styles.listTitle}>{props.title}</Text>
         }
       </TouchableOpacity>
       {
@@ -31,9 +50,9 @@ const TrackingComponent = (props: IconComponentProps) => {
           <FlatList
             data={props.list}
             renderItem={({ item }) => (
-              <ExpenseCard expense={item} />
+              <ExpenseCard expense={item} onPressEdit={() => editExpense(item)} onPressDelete={() => openDeleteExpenseConfirm(item)}/>
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id || item.name}
           />
           :
           <View></View>

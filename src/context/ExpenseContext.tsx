@@ -14,9 +14,9 @@ type ExpenseContextType = {
     asyncUpdateExpense: (expense:Expense) => Promise<void>;
     asyncDeleteExpense: (id:string) => Promise<void>;
     getExpenseById: (id:string) => Expense;
-    getExpenseByCard: (idCard: string) => Promise<Expense[]>;
-    getExpenseByCategory: (idCategory: string) => Promise<Expense[]>;
-    getExpenseByDate: (year:number, month: number) => Promise<Expense[]>;
+    getExpenseByCard: (idCard: string) => Expense[];
+    getExpenseByCategory: (idCategory: string) => Expense[];
+    getExpenseByDate: (year:number, month: number) => Expense[];
     getExpenses: () => Expense[];
 }
 
@@ -97,22 +97,26 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
         return expenses[index]
     }
 
-    const getExpenseByCard = async (idCard:string) => {
-        const newExpenses = await services.expenseService.getExpenseByCard(auth.user!.uid, idCard);
-        newExpenses.sort((a, b) => b.date - a.date);
-        return newExpenses
+    const getExpenseByCard = (idCard:string) => {
+        const newExpenses: Expense[] = expenses.filter(expense => {
+            if (expense.idCard == idCard) return expense;
+        })
+        return newExpenses.sort((a, b) => b.date - a.date);
     }
 
-    const getExpenseByCategory = async (idCategory:string) => {
-        const newExpenses = await services.expenseService.getExpenseByCategory(auth.user!.uid, idCategory);
-        newExpenses.sort((a, b) => b.date - a.date);
-        return newExpenses
+    const getExpenseByCategory = (idCategory:string) => {
+        const newExpenses: Expense[] = expenses.filter(expense => {
+            if (expense.idCategory == idCategory) return expense;
+        })
+        return newExpenses.sort((a, b) => b.date - a.date);
     }
 
-    const getExpenseByDate = async (year:number, month: number) => {
-        const newExpenses = await services.expenseService.getExpenseByDate(auth.user!.uid, year, month);
-        newExpenses.sort((a, b) => b.date - a.date);
-        return newExpenses;
+    const getExpenseByDate = (year:number, month: number) => {
+        const newExpenses: Expense[] = expenses.filter(expense => {
+            const date: Date = new Date(expense.date);
+            if(date.getFullYear() == year && date.getMonth() == month) return expense;
+        })
+        return newExpenses.sort((a, b) => a.date - b.date);
     }
 
     const getExpenses = () => {
