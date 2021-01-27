@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Image,Alert, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Image, Alert, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useAuth } from "../context/AuthContext";
 //import { useStoreState } from '../hooks/hooks';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -61,55 +61,63 @@ const AuthScreen: React.FC<Props> = () => {
     };
 
     return (
-        <View style={styles.container}>
-        <KeyboardAwareScrollView
-            style={{ flex: 1, width: '100%' }}
-            keyboardShouldPersistTaps="always">
-        
-               
+        <SafeAreaView style={styles.droidSafeArea}>
+            {/* <View style={styles.container}> */}
+                <KeyboardAwareScrollView
+                    style={{ flex: 1, width: '100%' }}
+                    keyboardShouldPersistTaps="always">
 
-               <Image
-                    style={styles.logo}
-                    source={require('../images/wallet.png')}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder='E-mail'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={setEmail}
-                    value={email}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholderTextColor="#aaaaaa"
-                    secureTextEntry
-                    placeholder='Password'
-                    onChangeText={setPassword}
-                    value={password}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={onPressLogin}>
-                    <Text style={styles.buttonTitle}>Se connecter <AntDesign name="login" size={24} /></Text>
-                </TouchableOpacity>
 
-                <View style={styles.footerView}>
-                
-                    <Text style={styles.footerText}>Vous n'avez pas de compte? <Text onPress={onPressRegister} style={styles.footerLink}>s'inscrire</Text></Text>
-                </View>
-            </KeyboardAwareScrollView>
-        </View>
 
+                    <Image
+                        style={styles.logo}
+                        source={require('../images/wallet.png')}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='E-mail'
+                        placeholderTextColor="#aaaaaa"
+                        onChangeText={setEmail}
+                        value={email}
+                        underlineColorAndroid="transparent"
+                        autoCapitalize="none"
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholderTextColor="#aaaaaa"
+                        secureTextEntry
+                        placeholder='Password'
+                        onChangeText={setPassword}
+                        value={password}
+                        underlineColorAndroid="transparent"
+                        autoCapitalize="none"
+                    />
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={onPressLogin}>
+                        <Text style={styles.buttonTitle}>Se connecter <AntDesign name="login" size={24} /></Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.footerView}>
+
+                        <Text style={styles.footerText}>Vous n'avez pas de compte? <Text onPress={onPressRegister} style={styles.footerLink}>s'inscrire</Text></Text>
+                    </View>
+                </KeyboardAwareScrollView>
+            {/* </View> */}
+        </SafeAreaView>
     );
 };
 
 export default AuthScreen;
 
 const styles = StyleSheet.create({
+    droidSafeArea: {
+        flex: 1,
+        alignItems: "center",
+        width: "100%",
+        paddingTop: Platform.OS === "android" ? 25 : 0,
+        backgroundColor: "#212227"
+      },
     container: {
         flex: 1,
         alignItems: 'center'
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
     },
     footerText: {
         fontSize: 16,
-        color: '#2e2e2d'
+        color: '#f1f1f1'
     },
     footerLink: {
         color: "#788eec",

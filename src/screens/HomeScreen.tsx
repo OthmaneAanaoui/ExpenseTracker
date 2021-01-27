@@ -1,112 +1,68 @@
-import { useStoreState } from "../store/hooks";
-import React, { useEffect, useState } from "react";
+import { useStoreActions, useStoreState } from "../store/hooks";
+import React, { useContext, useEffect, useState } from "react";
 import { Platform, SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Modal, Alert, ScrollView, FlatList } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import ExpenseCard from "../components/ExpenseCard";
-import { Expense } from "../types/Expense";
-import NewExpenseCard from "../components/NewExpenseCard";
 import ExpenseEditModal from "../components/ExpenseEditModal";
+import { useExpense } from "../context/ExpenseContext";
+import { Expense } from "../types/Expense";
 import DeleteModal from "../components/DeleteModal";
+import { auth } from "firebase";
+import { useAuth } from "../context/AuthContext";
 type Props = {};
-
 
 const HomeScreen: React.FC<Props> = () => {
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const { currentSelection } = useStoreState(state => state.currentSelectionModel)
   const [modalExpenseEdit, setModalExpenseEdit] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState<string>('date');
-  const [show, setShow] = useState(false);
+  const expenseContext = useExpense();
+  const [expenseList, setExpenseList] = useState<Expense[] | undefined>(expenseContext?.getExpenses() || undefined);
+  const [selection, setSelection] = useState<Expense | undefined>(undefined)
+  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const soldeStore = useStoreState(state => state.soldeStoreModel)
+  const getSoldeStore = useStoreActions(actions => actions.soldeStoreModel.fetchSolde)
+  const setSoldeStore = useStoreActions(actions => actions.soldeStoreModel.pushSolde)
+  const auth = useAuth()
 
   const onPressAddIncome = () => {
-    console.log("add income")
+    setSelection(undefined)
+    setModalExpenseEdit(true);
+  }
+  
+  const save = () => {
+    setModalExpenseEdit(false);
+    setRefresh(!refresh)
+  }
+
+  const editExpense = (item: Expense) => {
+    setSelection(item)
     setModalExpenseEdit(true);
   }
 
-  const onChangeDate = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-    console.log(currentDate)
-  };
+  const openDeleteExpenseConfirm = (item: Expense) => {
+      setSelection(item)
+      setModalDeleteVisible(true)
+  }
+
+  const deleteExpense = () => {
+    setModalDeleteVisible(false)
+    const expense = expenseContext?.getExpenseById(selection?.id!)
+    const newValueSolde = expense?.isIncome ? soldeStore.solde.montant - expense?.value : soldeStore.solde.montant + expense?.value!
+    const newSolde = {id:soldeStore.solde.id, montant:newValueSolde}
+    expenseContext?.asyncDeleteExpense(selection?.id!)
+    setSoldeStore({uid:auth.user!.uid, solde:newSolde})
+    setSelection(undefined)
+    setRefresh(!refresh)
+  }
 
   useEffect(() => {
-    // categoryContext?.asyncGetAll()
-  }, [])
-  // pour tester une Expense à virer dès que la création est finie
-  const testExpense: Expense[] = [{
-    id: "11",
-    name: "Mes premières courses",
-    idCategory: "TH3IwH7f9FqCBgU6kU4Q",
-    date: Date.now(),
-    value: 124.57,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Course de la semaine",
-    idCategory: "YIFsvV0ATAOoGKxSlvoq",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Course de la semaine",
-    idCategory: "iwOm7gQIPPlqsPhfBSE7",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Course de la semaine",
-    idCategory: "aV0uxGRfSLShKmlIdjIO",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Contrôle technique",
-    idCategory: "aV0uxGRfSLShKmlIdjIO",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Course de la semaine",
-    idCategory: "Rhe6reWPa83W90AntxEa",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  },
-  {
-    id: "987",
-    name: "Course de la semaine",
-    idCategory: "j3UXCSs6SeJt8geOkAXY",
-    date: Date.now(),
-    value: 22.99,
-    idCard: "123",
-    isIncome: false
-  }
-  ]
-
-  const closeNextExpenseModal = () => {
-    console.log("close expense modal")
-  }
+    const list =  expenseContext?.getExpenses()
+    setExpenseList(list)
+  }, [refresh])
 
   return (
     <SafeAreaView style={styles.droidSafeArea}>
+      <View style={styles.page}>
       <Text style={styles.titlePage}>Solde</Text>
       <View style={styles.sectionSolde}>
         <Text style={styles.textSolde}>1236.59 €</Text>
@@ -114,77 +70,22 @@ const HomeScreen: React.FC<Props> = () => {
           <View style={[styles.barSolde, { width: 100 }]}></View>
         </View>
       </View>
-      {/* <ScrollView style={styles.viewLists}> */}
       <View style={styles.viewLists}>
         <FlatList
-          data={testExpense}
+          data={expenseList}
           renderItem={({ item }) => (
-            <ExpenseCard expense={item} />
+            <ExpenseCard expense={item} onPressEdit={() => editExpense(item)} onPressDelete={() => openDeleteExpenseConfirm(item)}/>
           )}
           keyExtractor={(item, index) => item.id! + index}
           contentContainerStyle={styles.list}
         />
       </View>
-      <NewExpenseCard 
-          visible={true}
-          isNew={true}
-          idExpense={""}
-          idCategory={"0"}
-          idCard={"0"}
-          isIncome={false}
-          name={""}
-          value={0}
-          date={Date.now()}
-          closeDisplay={() => closeNextExpenseModal()}
-      />
-      {/* </ScrollView> */}
-      <TouchableOpacity style={styles.buttonIncome} onPress={() => onPressAddIncome()}>
+      <TouchableOpacity style={styles.buttonIncome} onPress={onPressAddIncome}>
         <AntDesign name="plus" size={30} color="white" />
       </TouchableOpacity>
-      {/* <View style={styles.centeredView}> */}
-      {/* <View style={styles.modalView}>
-            <Text style={styles.modalText}>Add operation</Text>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              // mode={mode}
-              is24Hour={true}
-              display="calendar"
-              onChange={onChangeDate}
-            />
-            
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-              onPress={() => console.log("click")}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight>
-          </View> */}
-      {/* </View> */}
-      {/* fenetre modale afficher pour entrer une nouvelle opération */}
-      {/* <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalOperationVisible}
-        onRequestClose={() => {
-          setModalOperationVisible(!modalOperationVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
-              onPress={() => {
-                setModalOperationVisible(!modalOperationVisible);
-              }}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
-    </View> */}
-      <ExpenseEditModal isNew={true} visible={modalExpenseEdit} onPressSave={() => { console.log("save press"); setModalExpenseEdit(!modalExpenseEdit) }} onPressCancel={() => setModalExpenseEdit(!modalExpenseEdit)} />
+    </View>
+      <DeleteModal visible={modalDeleteVisible} onPressDelete={() =>  deleteExpense()} onPressCancel={() => setModalDeleteVisible(!modalDeleteVisible)}/>
+      <ExpenseEditModal visible={modalExpenseEdit} expense={selection} onPressSave={save} onPressCancel={() => setModalExpenseEdit(!modalExpenseEdit)} />
     </SafeAreaView>
   );
 
@@ -199,6 +100,11 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: Platform.OS === "android" ? 25 : 0,
     backgroundColor: "#212227"
+  },
+  page:{
+    width:"100%",
+    height:"100%",
+    alignItems: "center",
   },
   titlePage: {
     color: "white",
@@ -320,6 +226,7 @@ const styles = StyleSheet.create({
   viewLists: {
     flex: 1,
     width: '95%',
+    marginTop:10
   },
   list: {
     flexGrow: 1,

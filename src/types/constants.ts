@@ -15,4 +15,6 @@ import { useFirebase } from "../firebase/firebase";
 export const queryUser = useFirebase.firestore().collection('user');
 export const queryIcon = useFirebase.firestore().collection('icon');
 
-export const storageIcon = 'expenseStorageCategoryIcon'
+export const STORAGE_ICON = 'expenseStorageCategoryIcon'
+
+export const STORAGE_SOLDE = 'expenseStorageSolde'

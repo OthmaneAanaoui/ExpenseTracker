@@ -39,35 +39,35 @@ const CategoryManagementScreen: React.FC<Props> = (props) => {
                 <FlatList
                     data={categoriesContext?.getCatgories()}
                     renderItem={({ item }) => (
-                            <View style={styles.card}>
-                                <LinearGradient
-                                    colors={['#2A2D34', '#64666A']}
-                                    start={{ x: 0, y: 0 }}
-                                    end={{ x: 1, y: 0 }}
-                                    style={styles.backgroundlinear}
-                                />
-                                {/* <View style={styles.contentCard}> */}
-                                <View style={[styles.categoryView, { backgroundColor: item.color }]}>
-                                    <IconComponent idIcon={item.idIcon} size={20} />
-                                </View>
-                                <View style={styles.viewNameCategory}>
-                                    <Text style={styles.nameCategoryStyle}>{item.name}</Text>
-                                </View>
-                                <View>
-                                    <View style={styles.editButtonView}>
-                                        <TouchableOpacity onPress={() => navToEditCategory(item)} style={{ marginRight: 5 }}>
-                                            <IconComponent import={'MaterialIcons'} iconName="edit" size={24} color="#14B17E" />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => {
-                                            setCurrentSelection(item)
-                                            setModalDeleteVisible(true)
-                                        }}>
-                                            <IconComponent import={'MaterialCommunityIcons'} iconName="trash-can-outline" size={24} color="#E54200" />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                                {/* </View> */}
+                        <View style={styles.card}>
+                            <LinearGradient
+                                colors={['#2A2D34', '#64666A']}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 1, y: 0 }}
+                                style={styles.backgroundlinear}
+                            />
+                            {/* <View style={styles.contentCard}> */}
+                            <View style={[styles.categoryView, { backgroundColor: item.color }]}>
+                                <IconComponent idIcon={item.idIcon} size={20} />
                             </View>
+                            <View style={styles.viewNameCategory}>
+                                <Text style={styles.nameCategoryStyle}>{item.name}</Text>
+                            </View>
+                            <View>
+                                <View style={styles.editButtonView}>
+                                    <TouchableOpacity onPress={() => navToEditCategory(item)} style={{ marginRight: 5 }}>
+                                        <IconComponent import={'MaterialIcons'} iconName="edit" size={24} color="#14B17E" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => {
+                                        setCurrentSelection(item)
+                                        setModalDeleteVisible(true)
+                                    }}>
+                                        <IconComponent import={'MaterialCommunityIcons'} iconName="trash-can-outline" size={24} color="#E54200" />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            {/* </View> */}
+                        </View>
                     )}
                     keyExtractor={(item, index) => item.id! + index}
                     contentContainerStyle={styles.listCard}

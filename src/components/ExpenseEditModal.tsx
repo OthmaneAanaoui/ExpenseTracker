@@ -1,39 +1,70 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Modal, TouchableOpacity, Switch, TextInput } from 'react-native';
+import { Text, View, StyleSheet, Modal, TouchableOpacity, Switch, TextInput, Alert, FlatList } from 'react-native';
 import { Input } from "react-native-elements";
 import { ModalDatePicker } from "react-native-material-date-picker";
+import { useCategory } from '../context/CategoryContext';
 import { useExpense } from '../context/ExpenseContext';
+import { numberToString, stringToNumber } from '../model/arythmetic';
+import { AntDesign } from '@expo/vector-icons';
 import { Expense } from '../types/Expense';
+import IconComponent from './IconComponent';
+import { Category } from '../types/Category';
+import { useAuth } from '../context/AuthContext';
+import { useStoreActions, useStoreState } from '../store/hooks';
 
 interface ExpenseEditModalProps {
     visible: boolean;
     onPressSave: Function;
     onPressCancel: Function;
-    isIncome?: boolean;
-    isNew:boolean;
-    idExpense?:string;
-    idCategory?:string;
-    idCard?:string;
-    name?:string;
-    value?: number;
-    date?: number;
+    expense?: Expense;
 }
 
-const ExpenseEditModal = (props: ExpenseEditModalProps) => {
+const ExpenseEditModal: React.FC<ExpenseEditModalProps> = (props) => {
     const [modalVisible, setModalVisible] = useState<boolean>(props.visible)
-    const [isIncomes, setIncomes] = useState<boolean>(props.isIncome || false)
-    const [name, setName] = useState<string>(props.name || "")
-    const [value, setValue] = useState<number>(props.value || 0)
-    const [date, setDate] = useState<Date>(props.date != undefined ? new Date(props.date) : new Date())
-    const [idCard, setIdCard] = useState<string>(props.idCard || "")
-    const [idCategory, setIdCategory] = useState<string>(props.idCategory || "")
+    const [isIncomes, setIncomes] = useState<boolean>(props.expense?.isIncome || false)
+    const [name, setName] = useState<string>(props.expense?.name || "")
+    const [amount, setAmount] = useState<string>(numberToString(props.expense?.value))
+    const [date, setDate] = useState<Date>(props.expense?.date != undefined ? new Date(props.expense.date) : new Date())
+    const [idCard, setIdCard] = useState<string>(props.expense?.idCard || "")
+    const [idCategory, setIdCategory] = useState<string>(props.expense?.idCategory || "")
+    const [category, setCategory] = useState<Category | undefined>(undefined)
+    const categoriesContext = useCategory()
+    const auth = useAuth()
+    const soldeStore = useStoreState(state => state.soldeStoreModel)
+    const getSoldeStore = useStoreActions(actions => actions.soldeStoreModel.fetchSolde)
+    const setSoldeStore = useStoreActions(actions => actions.soldeStoreModel.pushSolde)
+    
+    const expenseContext = useExpense()
 
-    const exp = useExpense()
-
+    const initData = () => {
+        if (props.expense !== undefined) {
+            setName(props.expense.name)
+            setAmount(numberToString(props.expense?.value))
+            setDate(new Date(props.expense.date))
+            setIncomes(props.expense.isIncome)
+            const cat = categoriesContext?.getCategoryById(props.expense.idCategory)
+            setCategory(cat)
+            setIdCategory(props.expense.idCategory)
+        } else {
+            setName("")
+            setAmount("")
+            setIncomes(false)
+            setDate(new Date())
+            const cat = categoriesContext?.getCatgories()[0]
+            setCategory(cat)
+            if(cat?.id !== undefined) {
+                setIdCategory(cat.id)
+            }
+        }
+    }
+    useEffect(() => {
+        initData()
+    }, [])
 
     useEffect(() => {
+        initData()
         setModalVisible(props.visible)
     }, [props.visible])
 
@@ -41,47 +72,46 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
         setIncomes(!isIncomes);
     }
 
-    const onChanged = (text: string) => {
+    const onChangedAmount = (text: string) => {
         let newText = '';
-        let numbers = '0123456789';
-    
-        for (var i=0; i < text.length; i++) {
-            if(numbers.indexOf(text[i]) > -1 ) {
-                newText = newText + text[i];
-            }
-            else {
-                // your call back function
-                alert("please enter numbers only");
-            }
+        newText = text.replace(".", ",")
+        if (newText.charAt(0) === ',') {
+            newText = '0' + newText
         }
-        setValue(Number(newText));
+        if ((newText.split(",").length - 1) > 1 || newText.charAt(newText.length - 1) === '-') {
+            newText.substring(0, newText.length - 1)
+            return
+        }
+        setAmount(newText)
     }
 
-    const save = () => {
-        if (props.isNew) return onCreate();
-        else return onSave();
-    }
-
-    const onCreate = () => {
-        if(props.isNew == true && props.idExpense === "") exp?.asyncCreateExpense(props.name!, props.idCategory!, props.value!, props.idCard!, props.isIncome!);
-        props.onPressSave();
-    }
-
-    const onSave = () => {
-
-        if(props.isNew == false && props.idExpense != "" ) {
-            const newExpense: Expense = {
-                id:props.idExpense!,
-                name: name,
-                idCard: idCard,
-                idCategory: idCategory,
-                value: value,
-                date: date.getTime(),
-                isIncome: isIncomes
-            }
-            exp?.asyncUpdateExpense(newExpense);
+    const save = async () => {
+        if (amount === '' || name === '') {
+            Alert.alert("You must fill all fields")
+            return
+        }
+        const newExpense: Expense = {
+            name: name,
+            idCard: idCard,
+            idCategory: idCategory,
+            value: stringToNumber(amount),
+            date: date.getTime(),
+            isIncome: isIncomes
+        }
+        if (props.expense === undefined) { // props.expense === undefined -> create new expense
+            await expenseContext?.asyncCreateExpense(newExpense)
+            
+        } else {
+            await expenseContext?.asyncUpdateExpense({ ...newExpense, id: props.expense.id })
         }
         props.onPressSave()
+    }
+
+    const changeCategory = (item: Category) => {
+        if (item.id !== undefined) {
+            setIdCategory(item.id)
+            setCategory(item)
+        }
     }
 
     return (
@@ -91,65 +121,112 @@ const ExpenseEditModal = (props: ExpenseEditModalProps) => {
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => {
-                    // setModalVisible(!modalVisible)
                     props.onPressCancel();
                 }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <LinearGradient
-                            colors={['#858D99', '#535963']}
-                            start={{x:0,y:0}}
-                            end={{x:0.5,y:0.5}}
+                            colors={['#2e2f36', '#47484d']}
+                            start={{ x: 0.2, y: 0.5 }}
+                            end={{ x: 0.5, y: 1 }}
                             style={styles.backgroundlinear}
                         />
-                        <View style={styles.dateSelect}>
-                            <ModalDatePicker
-                                button={<Text style={styles.date}>{date.getDate()}/{date.getMonth()+1}/{date.getFullYear()}</Text>}
-                                locale="fr"
-                                onSelect={(date:any) => setDate(date) }
-                                isHideOnSelect={true}
-                                initialDate={props.isNew?new Date():date}
-                            />
-                        </View>
                         <View style={styles.viewSwitchIncome}>
-                            <Text style={styles.textSwitchButton}>Expense</Text>
+                            <Text style={styles.textSwitchButton}>Income</Text>
                             <Switch
                                 trackColor={{ false: "#363636", true: "#363636" }}
-                                thumbColor={isIncomes ? "red" : "#14B17E"}
+                                thumbColor={isIncomes ? "#14B17E" : "red"}
                                 onValueChange={toggleSwitch}
                                 value={!isIncomes}
-                                style={{transform:[{ scaleX: 1.5}, { scaleY: 1.5 }], marginHorizontal:10}}
+                                style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }], marginHorizontal: 12 }}
                             />
-                            <Text style={styles.textSwitchButton}>Income</Text>
+                            <Text style={styles.textSwitchButton}>Expense</Text>
                         </View>
-                        <View style={styles.view}>
-                            <Text style={styles.item}> Name : </Text>
+                        <View style={styles.dateSelect}>
+                            <ModalDatePicker
+                                button={<Text style={styles.date}>{date.getDate()}/{date.getMonth() + 1}/{date.getFullYear()}</Text>}
+                                locale="fr"
+                                onSelect={(date: any) => { setDate(date)}}
+                                isHideOnSelect={true}
+                                initialDate={props.expense ? new Date() : date}
+                            />
+                        </View>
+                        <View style={styles.viewInputText}>
+                            <Text style={styles.labelInput}> Name : </Text>
                             <Input
                                 value={name}
                                 onChangeText={value => setName(value)}
+                                style={styles.inputName}
                             />
                         </View>
-                        <View style={styles.view}>
-                            <Text style={styles.item}> Value : </Text>
+                        <View style={styles.viewInputText}>
+                            <Text style={styles.labelInput}> Value : </Text>
                             <TextInput
                                 keyboardType='numeric'
-                                onChangeText={(text)=> onChanged(text)}
-                                value={value.toString()}
-                                maxLength={10}  //setting limit of input
+                                onChangeText={(text) => onChangedAmount(text)}
+                                value={amount}
+                                maxLength={13}  //setting limit of input
+                                style={styles.inputAmount}
                             />
                         </View>
-                    <Text style={styles.modalText}>Please note that the deletion is irreversible.</Text>
-                    <View style={styles.modalButtonView}>
-                        <TouchableOpacity
-                                style={{ ...styles.openButton, backgroundColor: '#FF2300' }}
-                                onPress={() => props.onPressSave()}>
+                        <View style={styles.viewCategorySelect}>
+                                <LinearGradient
+                                    colors={['#2A2D34', '#64666A']}
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 0 }}
+                                    style={styles.backgroundlinear}
+                                />
+                                {/* <View style={styles.contentCard}> */}
+                                <View style={[styles.categoryView, { backgroundColor: category?.color }]}>
+                                    <IconComponent idIcon={category?.idIcon} size={20} />
+                                </View>
+                                <View style={styles.viewNameCategory}>
+                                    <Text style={styles.nameCategoryStyle}>{category?.name}</Text>
+                                </View>
+                            </View>
+                        <View style={styles.viewCategory}>
+
+                            <FlatList
+                                data={categoriesContext?.getCatgories()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => changeCategory(item)} >
+                                        <View style={styles.card}>
+                                            <LinearGradient
+                                                colors={item.id === idCategory ? ['#57445e', '#7d5b8a'] : ['#2A2D34', '#64666A']}
+                                                start={{ x: 0, y: 0 }}
+                                                end={{ x: 1, y: 0 }}
+                                                style={styles.backgroundlinear}
+                                            />
+                                            {/* <View style={styles.contentCard}> */}
+                                            <View style={[styles.categoryView, { backgroundColor: item.color }]}>
+                                                <IconComponent idIcon={item.idIcon} size={20} />
+                                            </View>
+                                            <View style={styles.viewNameCategory}>
+                                                <Text style={styles.nameCategoryStyle}>{item.name}</Text>
+                                            </View>
+                                            {/* </View> */}
+                                            {item.id === idCategory ?
+                                                <AntDesign name="checkcircle" size={24} color="#00994d" style={{ marginRight: 5 }} />
+                                                : <></>
+                                            }
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                                keyExtractor={(item, index) => item.id! + index}
+                            // contentContainerStyle={styles.listCard}
+                            />
+
+                        </View>
+                        <View style={styles.modalButtonView}>
+                            <TouchableOpacity
+                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                onPress={() => save()}>
                                 <Text style={styles.textStyle}>Save</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+                                style={{ ...styles.openButton, backgroundColor: '#FF2300' }}
                                 onPress={() => {
-                                    // setModalVisible(!modalVisible);
                                     props.onPressCancel()
                                 }}>
                                 <Text style={styles.textStyle}>Cancel</Text>
@@ -176,10 +253,9 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 20,
         width: "95%",
-        height: "99%",
+        height: "98%",
         overflow: 'hidden',
         borderRadius: 20,
-        alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -191,7 +267,6 @@ const styles = StyleSheet.create({
     },
     backgroundlinear: {
         position: 'absolute',
-        //top: -20,
         height: "100%",
         width: '100%'
     },
@@ -202,22 +277,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modalButtonView: {
-        flexDirection: 'row',
-    },
-    modalBackgroundSail: {
-        flex: 1,
         position: 'absolute',
-        top: 0,
-        left: 0,
+        flexDirection: 'row',
+        justifyContent: 'center',
         width: "100%",
-        height: 2500,
-        backgroundColor: 'rgba(0,0,0,0.5)'
+        bottom: 10
     },
     openButton: {
         backgroundColor: '#F194FF',
         borderRadius: 10,
         padding: 10,
         elevation: 2,
+        width: 70,
         margin: 10
     },
     textStyle: {
@@ -226,25 +297,108 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-    viewSwitchIncome:{
+    viewSwitchIncome: {
         flexDirection: 'row',
-        marginTop:15,
+        marginTop: 20,
+        justifyContent: 'center',
     },
-    textSwitchButton:{
-        color: 'white', 
-        fontSize:18 
+    textSwitchButton: {
+        color: 'white',
+        fontSize: 18
     },
-    item: {
-        color:"white"
+    labelInput: {
+        color: "white",
+        fontSize: 14
     },
-    view: {
-        margin: 5
+    viewInputText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: 10,
+        width: "83%",
+    },
+    dateSelect: {
+        marginTop: 20,
+        marginLeft: 20,
+        alignItems: 'center',
     },
     date: {
         color: 'white',
-        fontSize: 10
+        fontSize: 20
     },
-    dateSelect: {
-        flexDirection: "column"
+    inputAmount: {
+        marginLeft: 10,
+        color: '#f1f1f1',
+        fontSize: 30,
+        backgroundColor: '#393a40',
+        width: "95%",
+        borderRadius: 5,
     },
+    inputName: {
+        color: '#f1f1f1',
+        marginTop: 15,
+        backgroundColor: '#393a40',
+    },
+    viewCategory: {
+        flex: 1,
+        width: "80%",
+        marginLeft: "10%",
+        marginTop: 10,
+        marginBottom: 80,
+    },
+
+
+    card: {
+        width: "100%",
+        height: 40,
+        overflow: "hidden",
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    categoryView: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        marginVertical: 'auto',
+        marginLeft: 10,
+        marginRight: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    viewNameCategory: {
+        flex: 1,
+        marginLeft: 5,
+    },
+    nameCategoryStyle: {
+        color: '#f1f1f1',
+        fontWeight: '500',
+        fontSize: 14,
+    },
+    viewCategorySelect:{
+        width: "90%",
+        height: 50,
+        overflow: "hidden",
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 15,
+        marginLeft:"5%",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,  
+    }
 });

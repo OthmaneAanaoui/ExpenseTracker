@@ -8,7 +8,8 @@ import { useAuth } from "./AuthContext";
 
 type ExpenseContextType = {
     expenses: Expense[];
-    asyncCreateExpense: (name:string, idCategory:string, value:number, idCard:string, isIncome:boolean) => Promise<Expense>;
+    asyncCreateExpenseWithParams: (date:number, name:string, idCategory:string, value:number, idCard:string, isIncome:boolean) => Promise<Expense>;
+    asyncCreateExpense: (expense:Expense) => Promise<Expense>;
     asyncGetAll: () => Promise<Expense[]>;
     asyncUpdateExpense: (expense:Expense) => Promise<void>;
     asyncDeleteExpense: (id:string) => Promise<void>;
@@ -21,6 +22,7 @@ type ExpenseContextType = {
 
 const defaultExpenseState = {
     expenses: [],
+    asyncCreateExpenseWithParams: async () => undefined,
     asyncCreateExpense: async () => undefined,
     asyncGetAll: async () => undefined,
     asyncUpdateExpense: async () => undefined,
@@ -46,10 +48,17 @@ export const ExpenseContext = createContext<ExpenseContextType | null>(null)
 export const ExpenseContextProvider: React.FC = ({ children }) => {
     const auth = useAuth()
     const [expenses, setExpenses] = React.useState<Expense[]>([])
+ 
+    const asyncCreateExpenseWithParams: (date:number, name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (date, name, idCategory, value, idCard, isIncome) => {
+        const expense = await services.expenseService.addExpense(auth.user!.uid, date, name, idCategory, value, idCard, isIncome)
+        setExpenses([ ...expenses, expense ].sort((a, b) => b.date - a.date))
+        return expense
+    }
 
-    const asyncCreateExpense: (name: string, idCategory: string, value: number, idCard: string, isIncome: boolean) => Promise<Expense> = async (name, idCategory, value, idCard, isIncome) => {
-        const expense = await services.expenseService.addExpense(auth.user!.uid, name, idCategory, value, idCard, isIncome)
-        setExpenses([ ...expenses, expense ])
+    const asyncCreateExpense: (expense:Expense) => Promise<Expense> = async (expense) => {
+        const newExpense = await services.expenseService.addExpense(auth.user!.uid, expense.date, expense.name, expense.idCategory, expense.value, expense.idCard, expense.isIncome)
+        const list = [ ...expenses, newExpense ].sort((a, b) => b.date - a.date)
+        setExpenses(list)
         return expense
     }
 
@@ -76,8 +85,8 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
     const asyncDeleteExpense = async (id:string) => {
         try{
             await services.expenseService.deleteExpense(auth.user!.uid, id)
-            const index = expenses.findIndex(expense => expense.id === id)
-            setExpenses(expenses.splice(index,1))
+            const asyncNewExpense = await services.expenseService.getExpenses(auth.user!.uid)
+            setExpenses([...asyncNewExpense])
         } catch (err) {
             throw err
         }
@@ -90,19 +99,19 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
 
     const getExpenseByCard = async (idCard:string) => {
         const newExpenses = await services.expenseService.getExpenseByCard(auth.user!.uid, idCard);
-        newExpenses.sort((a, b) => a.date - b.date);
+        newExpenses.sort((a, b) => b.date - a.date);
         return newExpenses
     }
 
     const getExpenseByCategory = async (idCategory:string) => {
         const newExpenses = await services.expenseService.getExpenseByCategory(auth.user!.uid, idCategory);
-        newExpenses.sort((a, b) => a.date - b.date);
+        newExpenses.sort((a, b) => b.date - a.date);
         return newExpenses
     }
 
     const getExpenseByDate = async (year:number, month: number) => {
         const newExpenses = await services.expenseService.getExpenseByDate(auth.user!.uid, year, month);
-        newExpenses.sort((a, b) => a.date - b.date);
+        newExpenses.sort((a, b) => b.date - a.date);
         return newExpenses;
     }
 
@@ -114,6 +123,7 @@ export const ExpenseContextProvider: React.FC = ({ children }) => {
         <ExpenseContext.Provider
             value={{
                 expenses: expenses,
+                asyncCreateExpenseWithParams,
                 asyncCreateExpense,
                 asyncGetAll,
                 asyncUpdateExpense,

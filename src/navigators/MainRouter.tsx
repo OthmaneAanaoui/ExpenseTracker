@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import AuthNavigator from './AuthNavigator';
 import TabNavigator from './TabNavigator';
 import { CategoryContextProvider } from '../context/CategoryContext';
+import { ExpenseContextProvider } from '../context/ExpenseContext';
 
 const MainRouter = () => {
     const auth = useAuth()
@@ -23,7 +24,9 @@ const MainRouter = () => {
     return (
         <NavigationContainer>
             <CategoryContextProvider>
-                {redirection()}
+                <ExpenseContextProvider>
+                    {redirection()}
+                </ExpenseContextProvider>
             </CategoryContextProvider>
         </NavigationContainer>
     )

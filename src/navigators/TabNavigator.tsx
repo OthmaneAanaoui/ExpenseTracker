@@ -8,19 +8,33 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Filter from '../screens/TrackingScreen';
 import TrackingScreen from '../screens/TrackingScreen';
 // import { useStoreState } from '../store/hooks';
-import { useStoreActions } from '../store/hooks';
+import { useStoreActions, useStoreState } from '../store/hooks';
 import { useEffect } from 'react';
 import { useCategory } from '../context/CategoryContext';
+import { useExpense } from '../context/ExpenseContext';
+import { useAuth } from '../context/AuthContext';
 
 export const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const getIconsCategory = useStoreActions(actions => actions.iconStoreModel.fetchIcons)
   const categoryContext = useCategory()
+  const expenseContext = useExpense()
+    const getSoldeStore = useStoreActions(actions => actions.soldeStoreModel.fetchSolde)
+    const setSoldeStore = useStoreActions(actions => actions.soldeStoreModel.pushSolde)
+    const soldeStore = useStoreState(state => state.soldeStoreModel)
+    const authContext = useAuth()
 
   useEffect(() => {
     getIconsCategory()
     categoryContext?.asyncGetAll()
+    expenseContext?.asyncGetAll()
+    if(authContext.user?.uid !== undefined) {
+        getSoldeStore(authContext.user?.uid)
+        if(soldeStore === undefined){
+            setSoldeStore({uid:authContext.user?.uid, solde:{id:undefined, montant:0}})
+        }
+    }
   }, [])
 
     function ProfilNav() {

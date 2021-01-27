@@ -3,28 +3,26 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useCategory } from '../context/CategoryContext';
-import { useExpense } from '../context/ExpenseContext';
 import { getFormatDate } from '../model/Date';
 import { Category } from '../types/Category';
 import { Expense } from '../types/Expense';
 import IconComponent from './IconComponent';
-import DeleteModal from './DeleteModal';
 interface ExpenseCardProps {
   expense:Expense;
+  onPressEdit: () => void;
+  onPressDelete: () => void;
 }
 
 const ExpenseCard = (props: ExpenseCardProps) => {
   const categories = useCategory();
   const [category, setCategory] = useState<Category>()
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-  const expenseContext = useExpense()
 
-  const onPressModalDelete = () => {
-    if(props.expense?.id !== undefined) {
-      expenseContext?.asyncDeleteExpense(props.expense.id!)
-    }
-    setModalDeleteVisible(!modalDeleteVisible)
+  const expenseDirection = () => {
+    if(props.expense.isIncome)
+      return props.expense.value
+
+    return '-' + props.expense.value
   }
 
   useEffect(() => {
@@ -54,23 +52,22 @@ const ExpenseCard = (props: ExpenseCardProps) => {
             </View>
           </View>
           <View style={styles.amountView}>
-            <Text style={styles.amount}>{props.expense?.value}€</Text>
+            <Text style={[styles.amount, props.expense.isIncome ? {color:'#9cffbd'} : {color:'#ffc2c2'}] }>{expenseDirection()}€</Text>
           </View>
         </View>
       </TouchableOpacity>
       {editMode? 
         <View style={styles.editButtonView}>
-          <TouchableOpacity onPress={() => console.log("edit")} style={{marginRight:5}}>
+          <TouchableOpacity onPress={() => props.onPressEdit()} style={{marginRight:5}}>
             <IconComponent import={'MaterialIcons'} iconName="edit" size={24} color="#14B17E"/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setModalDeleteVisible(true)}>
+          <TouchableOpacity onPress={() => props.onPressDelete()}>
             <IconComponent import={'MaterialCommunityIcons'} iconName="trash-can-outline" size={24} color="#E54200"/>
           </TouchableOpacity>
         </View>
       :
       <></>
       }
-      <DeleteModal visible={modalDeleteVisible} onPressDelete={() =>  onPressModalDelete()} onPressCancel={() => setModalDeleteVisible(!modalDeleteVisible)}/>
     </View>
   );
 };
@@ -79,7 +76,7 @@ export default ExpenseCard;
 
 const styles = StyleSheet.create({
   container:{
-    marginTop:10,
+    marginBottom:5,
     paddingVertical:5,
     overflow: 'hidden',
     width: '100%',
@@ -129,8 +126,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   amount:{
-    fontWeight:'500',
-    fontSize:16,
+    // fontWeight:'bold',
+    fontSize:20,
     color:'white'
   },
   description:{
