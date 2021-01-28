@@ -13,7 +13,7 @@ export type BarStyle = {
 }
 export type EventBar = {
   index:number;
-  idBarClick:number;
+  idBarClick:string;
   typeClick?:any;
 }
 export type Bar = {
@@ -24,7 +24,7 @@ export type Bar = {
 
 export type DataBar = {
     title:string;
-    idGroupClick?:number;
+    idGroupClick?:string;
     bars:Bar[];
 }
 

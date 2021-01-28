@@ -21,7 +21,7 @@ export const minMaxHeight = (data: Bars) => {
             }
         })
     })
-    maxHeight *= 1.02
+    maxHeight *= 1.05
     minHeight *= 0.98
     return { maxHeight, minHeight }
 }

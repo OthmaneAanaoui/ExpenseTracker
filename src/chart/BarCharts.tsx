@@ -80,12 +80,12 @@ const BarCharts = (props: BarChartsProps) => {
    * @param pos_x 
    * @return svg <Text>
    */
-  const xTextDraw = (title:string, i:number, pos_x:number, idGroupClick?:number) => {
+  const xTextDraw = (title:string, i:number, pos_x:number, idGroupClick?:string) => {
     const fontColor = props.xAxis?.color !== undefined ? props.xAxis?.color : defaultBarChartsProps.xAxis?.color;
     const fontSize = props.xAxis?.fontSize !== undefined ? props.xAxis?.fontSize : defaultBarChartsProps.xAxis?.fontSize;
     const font_style = props.xAxis?.fontStyle !== undefined ? props.xAxis?.fontStyle : defaultBarChartsProps.xAxis?.fontStyle;
     let selectionType = SelectionTypeEnum.none
-    let id = -1
+    let id = ''
     if (idGroupClick) {
       selectionType = SelectionTypeEnum.month
       id = idGroupClick
@@ -140,13 +140,13 @@ const BarCharts = (props: BarChartsProps) => {
    * @param barStyle 
    * @return svg <Rect>
    */
-  const drawBar = (heightBar:number, index:number, key:string, pos_x:number, pos_y:number, barStyle?:BarStyle[], eventBar?:EventBar[], idGroupClick?:number) => {
+  const drawBar = (heightBar:number, value:number, index:number, key:string, pos_x:number, pos_y:number, barStyle?:BarStyle[], eventBar?:EventBar[], idGroupClick?:string) => {
     let style = barStyle?.filter(element => element.index === index)[0]
     let event = eventBar?.filter(element => element.index === index)[0]
     let fill:any = style?.color !== undefined ? style.color : defaultBarChartsProps.defaultBarColor
     let radius:number = style?.radius !== undefined ? style.radius : 2
     let selectionType = SelectionTypeEnum.none
-    let idItemClick = -1
+    let idItemClick = ''
     if(event && event.idBarClick) {
       selectionType =  event.typeClick ? event.typeClick : SelectionTypeEnum.month
       idItemClick = event.idBarClick
@@ -156,7 +156,7 @@ const BarCharts = (props: BarChartsProps) => {
         idItemClick = idGroupClick
       }
     }
-    return <Rect key={key} x={pos_x} y={pos_y} width={graphInfo.widthBar} height={heightBar} onPress={()=> onClick({ selectionType:selectionType, id:idItemClick}) } fill={fill} rx={radius}/>
+    return <Rect key={key} x={pos_x} y={pos_y} width={graphInfo.widthBar} height={heightBar} onPress={()=> onClick({ selectionType:selectionType, id:idItemClick, value:value}) } fill={fill} rx={radius}/>
   }
 
   /**
@@ -174,7 +174,7 @@ const BarCharts = (props: BarChartsProps) => {
           const heightBar = getProportionHeight(value, graphInfo.range, layoutSize?.height - graphInfo.xAxisHeight)
           pos_y -= heightBar
           const key = iGroup + "_" + iBar + "_" + iValue
-          const barRect = drawBar(heightBar, iValue, key, pos_x, pos_y, bar.barStyle, bar.eventBar, bGroup.idGroupClick)
+          const barRect = drawBar(heightBar, value, iValue, key, pos_x, pos_y, bar.barStyle, bar.eventBar, bGroup.idGroupClick)
           tags = [...tags, barRect]
         })
         pos_x += (graphInfo.widthBar + graphInfo.spacingBar)

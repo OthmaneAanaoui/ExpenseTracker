@@ -9,120 +9,39 @@ import Item from '../components/Categories'
 import { Category,initCategories } from '../types/Category';
 import { FlatList } from "react-native-gesture-handler";
 import { useCategory } from "../context/CategoryContext";
+import { useExpense } from "../context/ExpenseContext";
+import { Expense } from "../types/Expense";
+import { getBarsFromExpenses } from "../chart/dataChart";
+import IconComponent from "../components/IconComponent";
 
 type Props = {};
 
-// Format de données
-const data:Bars = [
-  // bar 1
-  {
-      title: 'Oct',
-      idGroupClick:0,
-      bars: [
-        {
-          data: [536,123,236,140],
-          // barStyle: [
-          //   {index:4, color:"red", radius:2 },
-          // ]
-        },
-        {
-          data: [70,320,164],
-          eventBar:[{index:0, idBarClick:22, typeClick:SelectionTypeEnum.category},
-            {index:1, idBarClick:53, typeClick:SelectionTypeEnum.category}],
-          barStyle: [
-            {index:0, color:"blue", radius:2 },
-            {index:1, color:"pink", radius:2 },
-            {index:2, color:"yellow", radius:2 }            
-          ]
-        },
-      ]
-  },
-  // bar 2
-  {
-      title: 'Nov',
-      idGroupClick:1,
-      bars: [
-      {
-        data: [1200,236],
-        barStyle: [
-          {index:0, color:"red", radius:2 },
-
-        ]
-      },
-      {
-        data: [80,254,189,163],
-        barStyle: [
-          {index:0, color:"blue", radius:2 },
-          {index:1, color:"pink", radius:2 },
-          {index:2, color:"yellow", radius:2 },            
-          {index:3, color:"orange", radius:2 }            
-        ]
-      }
-    ]
-  },
-    // bar 3
-    {
-      title: 'Dec',
-      bars: [
-      {
-        data: [1546],
-        barStyle: [
-          {index:0, color:"red", radius:2 },
-
-        ]
-      },
-      {
-        data: [125,478]
-      }
-    ]
-  },
-  // bar 4
-  {
-    title: 'Jan',
-    bars: [
-    {
-      data: [1442],
-      barStyle: [
-        {index:0, color:"red", radius:2 },
-
-      ]
-    },
-    {
-      data: [125,478]
-    }
-  ]
-},
-// bar 5
-{
-  title: 'Fev',
-  idGroupClick:4,
-  bars: [
-  {
-    data: [1326, 129.99],
-    barStyle: [
-      {index:0, color:"red", radius:2 },
-
-    ]
-  },
-  {
-    data: [125,478]
-  }
-]
-}
-]
-
-
-
 const StatScreen: React.FC<Props> = () => {
   
-  const [isEnabled, setIsEnabled] = useState(false);
   const { currentSelection } = useStoreState(state => state.currentSelectionModel)
   const categoryContext = useCategory()
-  
-  
+  const expenseContext = useExpense();
+  const [expenseList, setExpenseList] = useState<Expense[] | undefined>(expenseContext?.getExpenses() || undefined);
+  const [dataChart,setDataChart] = useState<Bars>()
+  const [categorySelect, setCatgeorySelect] = useState<Category>()
+  const [refresh, setRefresh] = useState<boolean>(false)
+
+  useEffect(() => {
+    if(expenseList !== undefined && categoryContext !== (undefined || null)){
+      const dataBars:Bars = getBarsFromExpenses(expenseList, categoryContext.getCatgories())
+      setDataChart(dataBars)
+    }
+  }, [])
+
+  useEffect(() => {
+    const cat = categoryContext?.getCategoryById(currentSelection.id)
+    if(cat !== undefined || null){
+      setCatgeorySelect(cat)
+    }
+  },[refresh])
 
   const onClickBarGraph = () => {
-    console.log("onClickBarGraph homescreen : ",currentSelection)
+    setRefresh(!refresh)
   }
 
   const onClickPreviousMonth = ()=> {
@@ -140,7 +59,6 @@ const StatScreen: React.FC<Props> = () => {
   const onClickNextYear = () => {
     console.log("next year")
   }
-  
   
     return (
       
@@ -168,9 +86,17 @@ const StatScreen: React.FC<Props> = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <Barcharts style={styles.barCharStyle} data={data} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
+        <Barcharts style={styles.barCharStyle} data={dataChart} spacingGroupBar={20} eventBar={() => onClickBarGraph()}/>
       </View>
-
+      <View style={{...styles.vignetteCategory, backgroundColor:categorySelect?.color}}>
+        <View style={styles.categoryType}>
+          <IconComponent idIcon={categorySelect?.idIcon} size={50} />
+          <Text style={styles.nameCategory}>{categorySelect?.name}</Text>
+        </View>
+        <View style={styles.viewTextOperation}>
+          <Text style={styles.textOperationCategory}>{currentSelection.value} €</Text>
+        </View>
+      </View>
 
       {/* <FlatList
       
@@ -236,6 +162,7 @@ const styles = StyleSheet.create({
       height:280,
       marginHorizontal:"auto",
       paddingRight:10,
+      marginTop:10,
       borderRadius:5,
     },
     buttonNavMonth:{
@@ -282,5 +209,36 @@ const styles = StyleSheet.create({
       fontSize:16,
     },
 
+    vignetteCategory:{
+      flex:1,
+      borderRadius:20,
+      overflow: 'hidden',
+      width:"90%",
+      marginLeft:"5%",
+      marginBottom:20
+    },
+    categoryType:{
+      flexDirection: "row",
+      marginTop:10,
+      marginLeft:15,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    nameCategory:{
+      color:'#f1f1f1',
+      marginLeft:10,
+      fontSize:26,
+      fontWeight: 'bold',
+    },
+    viewTextOperation:{
+      flex:1,
+      marginTop:30,
+      alignItems: "center",
+    },
+    textOperationCategory:{
+      color:'#f1f1f1',
+      fontSize:50,
+
+    }
     
   });

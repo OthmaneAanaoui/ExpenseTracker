@@ -36,7 +36,11 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
 
     const onPressValidEditEmail = () => {
         auth.user?.verifyBeforeUpdateEmail(inputEmail);
-        auth.user?.updateEmail(inputEmail);
+        try{
+            auth.user?.updateEmail(inputEmail);
+        } catch (e) {
+            Alert.alert("You are logged for a long time. You must logout/login before change email")
+        }
         setEditionEmail(false);
     }
 
@@ -57,7 +61,11 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
         if(inputPassword.length < 6){
             setEditionMsg(true);
         } else {
-            auth.user?.updatePassword(inputPassword);
+            try{
+                auth.user?.updatePassword(inputPassword);
+            } catch (e) {
+                Alert.alert("You are logged for a long time. You must logout/login before change password")
+            }
             setEditionPassword(false);
             setEditionMsg(false);
         }
@@ -70,7 +78,7 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
     }
 
     function logOut () {
-        auth.signOut;
+        auth.signOut();
     }
 
     return (
@@ -113,14 +121,14 @@ const AccountScreen: React.FC<Props> = ({ navigation }) => {
             <View style={styles.container}>
                 <View style={styles.containerInformation}>
                     {editionPassword ?
-                        <Input style={styles.input} value={inputPassword} onChangeText={value => setInputPassword(value)}/>
+                        <Input style={styles.input} secureTextEntry={true} value={inputPassword} onChangeText={value => setInputPassword(value)}/>
                         :
                         <Text style={styles.information}>{"Password"}</Text>
                     }
                     {editionMsg ?
                         <Text style={styles.alert}>You need at least 6 characters in the password</Text>
                         :
-                        <Text>hh</Text>
+                        <></>
                     }
                 </View>
                 {editionPassword ?

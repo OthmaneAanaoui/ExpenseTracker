@@ -1,13 +1,12 @@
 import { useStoreActions, useStoreState } from "../store/hooks";
-import React, { useContext, useEffect, useState } from "react";
-import { Platform, SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Modal, Alert, ScrollView, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Platform, SafeAreaView, StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import ExpenseCard from "../components/ExpenseCard";
 import ExpenseEditModal from "../components/ExpenseEditModal";
 import { useExpense } from "../context/ExpenseContext";
 import { Expense } from "../types/Expense";
 import DeleteModal from "../components/DeleteModal";
-import { auth } from "firebase";
 import { useAuth } from "../context/AuthContext";
 type Props = {};
 
@@ -20,9 +19,7 @@ const HomeScreen: React.FC<Props> = () => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const soldeStore = useStoreState(state => state.soldeStoreModel)
-  const getSoldeStore = useStoreActions(actions => actions.soldeStoreModel.fetchSolde)
   const setSoldeStore = useStoreActions(actions => actions.soldeStoreModel.pushSolde)
-  const [widthBarSolde, setWidthBarSolde] = useState<number>()
 
   const auth = useAuth()
 

@@ -11,6 +11,8 @@ type AuthContextType = {
     signOut: () => void;
 }
 
+type firebaseUser = firebase.User
+
 const defaultAuthState = {
     isSignedIn: false,
     register: async () => undefined,
@@ -35,6 +37,10 @@ export const AuthContextProvider: React.FC = ({ children }) => {
 
     const signOut = async () => {
         await firebase.auth().signOut()
+    }
+
+    const updateUser = async () => {
+        await firebase.auth().updateCurrentUser(auth.user!)
     }
 
     useEffect(() => {

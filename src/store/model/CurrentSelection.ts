@@ -8,7 +8,8 @@ export const SelectionTypeEnum = {
 
 export type CurrentSelection = {
     selectionType:number;
-    id:number;
+    id:string;
+    value:number
 }
 
 export interface CurrentSelectionModel {
@@ -24,11 +25,12 @@ export interface CurrentSelectionModel {
 }
 
 const currentSelectionModel: CurrentSelectionModel = {
-    currentSelection: {selectionType:SelectionTypeEnum.none, id:0},
-    setCurrentSelection: action((state, selection) =>{
+    currentSelection: {selectionType:SelectionTypeEnum.none, id:'0', value:0},
+    
+    setCurrentSelection: action((state, selection) => {
         state.currentSelection = selection
-        return ({selectionType:selection.selectionType, id:selection.id})
     })
+
 }
 
 export default currentSelectionModel;

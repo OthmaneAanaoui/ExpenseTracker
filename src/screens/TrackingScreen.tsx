@@ -58,8 +58,6 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
     const loadListFilterCard = () => {
 
-        console.log("loadListFilterCard")
-
         let l = card?.getCards();
         const liste: TypeListFilter[] = [];
         l?.forEach((item) => {
@@ -77,8 +75,6 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
 
     const loadListFilterCategory = () => {
 
-        console.log("loadListFilterCategory")
-
         let l = category?.categories;
         const liste: TypeListFilter[] = [];
         l?.forEach((item) => {
@@ -95,8 +91,6 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
     }
 
     const loadListFilterMonth = () => {
-
-        console.log("loadListFilterMonth")
 
         const liste: TypeListFilter[] = [];
         const currentDate: Date = new Date();
@@ -300,7 +294,7 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                                 {loadListPickerMonth()}
                             </Picker>
                             :
-                            <View></View>
+                            <></>
                     }
                     {
                         filterPicker == Filter.category ?
@@ -312,7 +306,7 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                                 {loadListPickerCategory()}
                             </Picker>
                             :
-                            <View></View>
+                            <></>
                     }
                     {
                         filterPicker == Filter.card ?
@@ -325,7 +319,7 @@ const TrackingScreen: React.FC<Props> = ({ choiceFilter }) => {
                                 {loadListPickerCard()}
                             </Picker>
                             :
-                            <View></View>
+                            <></>
                     }
                     <View>
                         
